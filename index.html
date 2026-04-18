@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0052)file:///D:/Descargas/lacasadepapel_puntuacion_2.html -->
+<!-- saved from url=(0052)file:///D:/Descargas/lacasadepapel_puntuacion_3.html -->
 <html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -318,8 +318,6 @@ function showScorer() {
     </div>
   `).join('');
 
-  const allHaveBills = teams.every(t => t.bills !== '');
-
   document.getElementById('screen').innerHTML = `
     <button class="back-setup-btn" onclick="showSetup(false)">← Cambiar número de equipos</button>
     <div class="table-header">
@@ -328,7 +326,7 @@ function showScorer() {
       <span class="th th-right">Billetes</span>
     </div>
     ${rowsHtml}
-    ${allHaveBills ? `<button class="podium-btn" onclick="showPodium()">VER PODIO</button>` : ''}
+    <button class="podium-btn" onclick="showPodium()">VER PODIO</button>
   `;
 }
 
@@ -356,7 +354,7 @@ function showPodium() {
         <div class="place-label">${placeLabels[rank]}</div>
         <div class="podium-eq-label">Equipo ${t.num}</div>
         <div class="podium-name">${escHtml(t.name || 'Equipo ' + t.num)}</div>
-        <div class="podium-bills-label">${parseInt(t.bills).toLocaleString()} B</div>
+        <div class="podium-bills-label">${parseInt(t.bills)||0} B</div>
         <div class="podium-stand"><span class="podium-medal">${medals[rank]}</span></div>
       </div>
     `;
@@ -370,7 +368,7 @@ function showPodium() {
         <span class="rank-pos ${posClass}">${i+1}º</span>
         <div class="rank-tnum">${t.num}</div>
         <span class="rank-name">${escHtml(t.name || 'Equipo ' + t.num)}</span>
-        <span class="rank-bills">${parseInt(t.bills).toLocaleString()}</span>
+        <span class="rank-bills">${parseInt(t.bills)||0}</span>
       </div>
     `;
   }).join('');
