@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)file:///D:/Descargas/lacasadepapel_puntuacion_2.html -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>La Casa de Papel — Puntuación</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;700;900&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #CC0000;
+    --red-dark: #990000;
+    --black: #111111;
+    --white: #FFFFFF;
+    --gray-light: #F4F4F2;
+    --gray-mid: #E0DED8;
+    --gray-text: #888;
+    --bronze: #8B5E2E;
+    --radius: 10px;
+    --font-display: 'Bebas Neue', 'Impact', sans-serif;
+    --font-body: 'Barlow', 'Helvetica Neue', sans-serif;
+  }
+
+  body {
+    background: var(--black);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #app {
+    width: 100%;
+    max-width: 480px;
+    min-height: 100vh;
+    background: var(--white);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header {
+    background: var(--black);
+    padding: 20px 16px 16px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .logo-text {
+    font-family: var(--font-display);
+    font-size: 38px;
+    letter-spacing: 2px;
+    color: var(--white);
+    line-height: 1;
+  }
+  .logo-de {
+    background: var(--red);
+    color: var(--white);
+    padding: 2px 10px 0;
+    border-radius: 4px;
+    font-family: var(--font-display);
+    font-size: 34px;
+    margin: 0 4px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  #screen {
+    flex: 1;
+    padding: 20px 16px 32px;
+    background: var(--white);
+  }
+
+  .setup-label {
+    font-family: var(--font-display);
+    font-size: 48px;
+    letter-spacing: 2px;
+    color: var(--black);
+    text-align: center;
+    margin-bottom: 24px;
+    line-height: 1.05;
+  }
+
+  .num-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    max-width: 340px;
+    margin: 0 auto;
+  }
+  .num-btn {
+    background: var(--gray-light);
+    border: 2px solid var(--gray-mid);
+    border-radius: var(--radius);
+    padding: 22px 0;
+    font-family: var(--font-display);
+    font-size: 64px;
+    line-height: 1;
+    color: var(--black);
+    cursor: pointer;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .num-btn:hover, .num-btn:active {
+    background: var(--red);
+    border-color: var(--red);
+    color: var(--white);
+    transform: scale(0.97);
+  }
+  .more-btn {
+    background: var(--black);
+    border: 2px solid var(--black);
+    border-radius: var(--radius);
+    padding: 22px 8px;
+    font-family: var(--font-display);
+    font-size: 26px;
+    letter-spacing: 1px;
+    line-height: 1.1;
+    color: var(--white);
+    cursor: pointer;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    grid-column: span 2;
+  }
+  .more-btn:hover, .more-btn:active {
+    background: var(--red);
+    border-color: var(--red);
+    transform: scale(0.97);
+  }
+
+  .back-setup-btn {
+    display: block;
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 10px;
+    background: transparent;
+    border: 1.5px solid var(--gray-mid);
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--gray-text);
+    cursor: pointer;
+    text-align: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .back-setup-btn:active { background: var(--gray-light); }
+
+  .table-header {
+    display: grid;
+    grid-template-columns: 48px 1fr 96px;
+    gap: 8px;
+    padding: 0 8px 8px;
+    border-bottom: 2px solid var(--black);
+    margin-bottom: 10px;
+  }
+  .th { font-family: var(--font-display); font-size: 14px; letter-spacing: 1px; color: var(--gray-text); }
+  .th-center { text-align: center; }
+  .th-right { text-align: right; }
+
+  .team-row {
+    display: grid;
+    grid-template-columns: 48px 1fr 96px;
+    gap: 8px;
+    align-items: center;
+    padding: 8px;
+    background: var(--white);
+    border: 1.5px solid var(--gray-mid);
+    border-radius: var(--radius);
+    margin-bottom: 8px;
+    transition: border-color 0.2s;
+  }
+  .team-row:focus-within { border-color: var(--red); }
+
+  .team-num-box {
+    width: 40px;
+    height: 40px;
+    background: var(--black);
+    color: var(--white);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 22px;
+    flex-shrink: 0;
+    margin: 0 auto;
+  }
+  .team-name-input, .team-bills-input {
+    background: var(--gray-light);
+    border: 1px solid var(--gray-mid);
+    border-radius: 8px;
+    padding: 10px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--black);
+    width: 100%;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .team-name-input:focus, .team-bills-input:focus { border-color: var(--red); background: var(--white); }
+  .team-name-input::placeholder, .team-bills-input::placeholder { color: #bbb; }
+  .team-bills-input { text-align: right; font-weight: 700; font-size: 15px; }
+
+  .podium-btn {
+    width: 100%;
+    margin-top: 14px;
+    padding: 16px;
+    background: var(--red);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--font-display);
+    font-size: 22px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .podium-btn:active { background: var(--red-dark); transform: scale(0.98); }
+
+  .section-label { font-family: var(--font-display); font-size: 18px; letter-spacing: 1.5px; color: var(--gray-text); text-align: center; margin-bottom: 12px; }
+
+  .podium-wrap { display: flex; align-items: flex-end; justify-content: center; gap: 8px; margin: 8px 0 24px; height: 190px; }
+  .podium-block { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; flex: 1; }
+  .podium-eq-label { font-size: 10px; color: var(--gray-text); margin-bottom: 2px; font-weight: 500; text-transform: uppercase; }
+  .podium-name { font-size: 12px; font-weight: 700; color: var(--black); text-align: center; margin-bottom: 3px; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .podium-bills-label { font-family: var(--font-display); font-size: 15px; margin-bottom: 5px; color: var(--black); }
+  .podium-stand { width: 100%; border-radius: 6px 6px 0 0; display: flex; align-items: flex-start; justify-content: center; padding-top: 10px; }
+  .podium-medal { font-size: 26px; }
+  .place-1 .podium-stand { height: 130px; background: var(--red); }
+  .place-2 .podium-stand { height: 95px; background: #555; }
+  .place-3 .podium-stand { height: 65px; background: var(--bronze); }
+  .place-label { font-family: var(--font-display); font-size: 11px; letter-spacing: 1px; margin-bottom: 4px; color: var(--gray-text); }
+  .place-1 .place-label { color: var(--red); }
+  .place-2 .place-label { color: #555; }
+  .place-3 .place-label { color: var(--bronze); }
+
+  .divider { height: 2px; background: var(--black); margin-bottom: 12px; }
+
+  .rank-row { display: grid; grid-template-columns: 30px 36px 1fr 72px; gap: 8px; align-items: center; padding: 10px 8px; border-radius: var(--radius); margin-bottom: 6px; border: 1.5px solid var(--gray-mid); background: var(--white); }
+  .rank-row.top1 { border-color: var(--red); background: #fff5f5; }
+  .rank-row.top2 { border-color: #999; background: #f8f8f8; }
+  .rank-row.top3 { border-color: var(--bronze); background: #fdf8f2; }
+  .rank-pos { font-family: var(--font-display); font-size: 16px; color: var(--gray-text); text-align: center; }
+  .rank-pos.p1 { color: var(--red); }
+  .rank-pos.p2 { color: #555; }
+  .rank-pos.p3 { color: var(--bronze); }
+  .rank-tnum { width: 30px; height: 30px; background: var(--black); color: var(--white); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 14px; }
+  .rank-name { font-size: 14px; font-weight: 700; color: var(--black); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .rank-bills { font-family: var(--font-display); font-size: 18px; color: var(--black); text-align: right; }
+
+  .back-btn { width: 100%; margin-top: 16px; padding: 12px; background: transparent; border: 1.5px solid var(--gray-mid); border-radius: var(--radius); font-family: var(--font-body); font-size: 14px; color: var(--gray-text); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .back-btn:active { background: var(--gray-light); }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="header">
+    <div class="logo-text">LA CASA <span class="logo-de">DE</span> PAPEL</div>
+  </div>
+  <div id="screen">
+    <div>
+      <div class="setup-label">¿CUÁNTOS EQUIPOS?</div>
+      <div class="num-grid">
+        <button class="num-btn" onclick="startGame(4)">4</button><button class="num-btn" onclick="startGame(6)">6</button><button class="num-btn" onclick="startGame(8)">8</button><button class="num-btn" onclick="startGame(10)">10</button><button class="num-btn" onclick="startGame(12)">12</button>
+        <button class="more-btn" onclick="showSetup(true)">MÁS EQUIPOS</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let teams = [];
+
+function showSetup(extended) {
+  const primary = [4, 6, 8, 10, 12];
+  const extra = [14, 16, 18, 20, 22, 24];
+  const options = extended ? extra : primary;
+
+  const btns = options.map(n => `<button class="num-btn" onclick="startGame(${n})">${n}</button>`).join('');
+  const moreOrBack = extended
+    ? `<button class="more-btn" onclick="showSetup(false)">← VOLVER</button>`
+    : `<button class="more-btn" onclick="showSetup(true)">MÁS EQUIPOS</button>`;
+
+  document.getElementById('screen').innerHTML = `
+    <div>
+      <div class="setup-label">¿CUÁNTOS EQUIPOS?</div>
+      <div class="num-grid">
+        ${btns}
+        ${moreOrBack}
+      </div>
+    </div>
+  `;
+}
+
+function startGame(n) {
+  teams = Array.from({length: n}, (_, i) => ({ num: i+1, name: '', bills: '' }));
+  showScorer();
+}
+
+function showScorer() {
+  const sorted = [...teams].sort((a, b) => {
+    const bv = b.bills !== '' ? parseInt(b.bills) : -1;
+    const av = a.bills !== '' ? parseInt(a.bills) : -1;
+    if (bv === av) return a.num - b.num;
+    return bv - av;
+  });
+
+  const rowsHtml = sorted.map(t => `
+    <div class="team-row">
+      <div style="display:flex;align-items:center;justify-content:center;">
+        <div class="team-num-box">${t.num}</div>
+      </div>
+      <input class="team-name-input" type="text" inputmode="text" autocomplete="off" placeholder="Nombre del equipo"
+        value="${escHtml(t.name)}" oninput="updateName(${t.num}, this.value)" />
+      <input class="team-bills-input" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="0"
+        value="${t.bills}" oninput="updateBills(${t.num}, this.value)" />
+    </div>
+  `).join('');
+
+  const allHaveBills = teams.every(t => t.bills !== '');
+
+  document.getElementById('screen').innerHTML = `
+    <button class="back-setup-btn" onclick="showSetup(false)">← Cambiar número de equipos</button>
+    <div class="table-header">
+      <span class="th th-center">#</span>
+      <span class="th">Equipo</span>
+      <span class="th th-right">Billetes</span>
+    </div>
+    ${rowsHtml}
+    ${allHaveBills ? `<button class="podium-btn" onclick="showPodium()">VER PODIO</button>` : ''}
+  `;
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function updateName(num, val) { teams.find(t => t.num === num).name = val; }
+
+function updateBills(num, val) {
+  teams.find(t => t.num === num).bills = val;
+  showScorer();
+}
+
+function showPodium() {
+  const sorted = [...teams].sort((a, b) => (parseInt(b.bills)||0) - (parseInt(a.bills)||0));
+  const medals = ['🥇','🥈','🥉'];
+  const placeLabels = ['1ER PUESTO','2º PUESTO','3ER PUESTO'];
+  const podiumOrder = [sorted[1], sorted[0], sorted[2]].filter(Boolean);
+
+  const podiumHtml = podiumOrder.map(t => {
+    const rank = sorted.indexOf(t);
+    return `
+      <div class="podium-block place-${rank+1}">
+        <div class="place-label">${placeLabels[rank]}</div>
+        <div class="podium-eq-label">Equipo ${t.num}</div>
+        <div class="podium-name">${escHtml(t.name || 'Equipo ' + t.num)}</div>
+        <div class="podium-bills-label">${parseInt(t.bills).toLocaleString()} B</div>
+        <div class="podium-stand"><span class="podium-medal">${medals[rank]}</span></div>
+      </div>
+    `;
+  }).join('');
+
+  const rankingsHtml = sorted.map((t, i) => {
+    const posClass = i === 0 ? 'p1' : i === 1 ? 'p2' : i === 2 ? 'p3' : '';
+    const rowClass = i === 0 ? 'top1' : i === 1 ? 'top2' : i === 2 ? 'top3' : '';
+    return `
+      <div class="rank-row ${rowClass}">
+        <span class="rank-pos ${posClass}">${i+1}º</span>
+        <div class="rank-tnum">${t.num}</div>
+        <span class="rank-name">${escHtml(t.name || 'Equipo ' + t.num)}</span>
+        <span class="rank-bills">${parseInt(t.bills).toLocaleString()}</span>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('screen').innerHTML = `
+    <div>
+      <div class="section-label">Podio final</div>
+      <div class="podium-wrap">${podiumHtml}</div>
+      <div class="divider"></div>
+      <div class="section-label">Clasificación</div>
+      <div>${rankingsHtml}</div>
+      <button class="back-btn" onclick="showScorer()">← Volver a editar</button>
+    </div>
+  `;
+}
+
+showSetup(false);
+</script>
+
+
+</body></html>
