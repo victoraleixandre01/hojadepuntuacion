@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0052)file:///D:/Descargas/lacasadepapel_puntuacion_3.html -->
+<!-- saved from url=(0052)file:///D:/Descargas/lacasadepapel_puntuacion_4.html -->
 <html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -19,8 +19,8 @@
     --gray-text: #888;
     --bronze: #8B5E2E;
     --radius: 10px;
-    --font-display: 'Bebas Neue', 'Impact', sans-serif;
-    --font-body: 'Barlow', 'Helvetica Neue', sans-serif;
+    --font-display: 'Bebas Neue', Impact, sans-serif;
+    --font-body: 'Barlow', 'Helvetica Neue', Arial, sans-serif;
   }
 
   body {
@@ -72,16 +72,16 @@
     background: var(--white);
   }
 
+  /* SETUP */
   .setup-label {
     font-family: var(--font-display);
-    font-size: 48px;
-    letter-spacing: 2px;
+    font-size: 56px;
+    letter-spacing: 3px;
     color: var(--black);
     text-align: center;
-    margin-bottom: 24px;
-    line-height: 1.05;
+    margin-bottom: 28px;
+    line-height: 1;
   }
-
   .num-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -102,7 +102,7 @@
     transition: all 0.15s;
     -webkit-tap-highlight-color: transparent;
   }
-  .num-btn:hover, .num-btn:active {
+  .num-btn:active {
     background: var(--red);
     border-color: var(--red);
     color: var(--white);
@@ -114,7 +114,7 @@
     border-radius: var(--radius);
     padding: 22px 8px;
     font-family: var(--font-display);
-    font-size: 26px;
+    font-size: 30px;
     letter-spacing: 1px;
     line-height: 1.1;
     color: var(--white);
@@ -123,16 +123,17 @@
     -webkit-tap-highlight-color: transparent;
     grid-column: span 2;
   }
-  .more-btn:hover, .more-btn:active {
+  .more-btn:active {
     background: var(--red);
     border-color: var(--red);
     transform: scale(0.97);
   }
 
+  /* SCORER */
   .back-setup-btn {
     display: block;
     width: 100%;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     padding: 10px;
     background: transparent;
     border: 1.5px solid var(--gray-mid);
@@ -154,7 +155,7 @@
     border-bottom: 2px solid var(--black);
     margin-bottom: 10px;
   }
-  .th { font-family: var(--font-display); font-size: 14px; letter-spacing: 1px; color: var(--gray-text); }
+  .th { font-family: var(--font-display); font-size: 16px; letter-spacing: 1px; color: var(--gray-text); }
   .th-center { text-align: center; }
   .th-right { text-align: right; }
 
@@ -168,10 +169,7 @@
     border: 1.5px solid var(--gray-mid);
     border-radius: var(--radius);
     margin-bottom: 8px;
-    transition: border-color 0.2s;
   }
-  .team-row:focus-within { border-color: var(--red); }
-
   .team-num-box {
     width: 40px;
     height: 40px;
@@ -192,62 +190,75 @@
     border-radius: 8px;
     padding: 10px;
     font-family: var(--font-body);
-    font-size: 14px;
+    font-size: 15px;
     color: var(--black);
     width: 100%;
     outline: none;
-    transition: border-color 0.15s;
   }
   .team-name-input:focus, .team-bills-input:focus { border-color: var(--red); background: var(--white); }
   .team-name-input::placeholder, .team-bills-input::placeholder { color: #bbb; }
-  .team-bills-input { text-align: right; font-weight: 700; font-size: 15px; }
+  .team-bills-input { text-align: right; font-weight: 700; font-size: 16px; }
 
   .podium-btn {
     width: 100%;
     margin-top: 14px;
-    padding: 16px;
+    padding: 18px;
     background: var(--red);
     color: var(--white);
     border: none;
     border-radius: var(--radius);
     font-family: var(--font-display);
-    font-size: 22px;
-    letter-spacing: 2px;
+    font-size: 28px;
+    letter-spacing: 3px;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
   }
   .podium-btn:active { background: var(--red-dark); transform: scale(0.98); }
 
-  .section-label { font-family: var(--font-display); font-size: 18px; letter-spacing: 1.5px; color: var(--gray-text); text-align: center; margin-bottom: 12px; }
-
-  .podium-wrap { display: flex; align-items: flex-end; justify-content: center; gap: 8px; margin: 8px 0 24px; height: 190px; }
+  /* PODIUM */
+  .section-label {
+    font-family: var(--font-display);
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: var(--gray-text);
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .podium-wrap {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 8px;
+    margin: 8px 0 24px;
+    height: 200px;
+  }
   .podium-block { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; flex: 1; }
-  .podium-eq-label { font-size: 10px; color: var(--gray-text); margin-bottom: 2px; font-weight: 500; text-transform: uppercase; }
-  .podium-name { font-size: 12px; font-weight: 700; color: var(--black); text-align: center; margin-bottom: 3px; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .podium-eq-label { font-size: 10px; color: var(--gray-text); margin-bottom: 2px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+  .podium-name { font-family: var(--font-display); font-size: 16px; color: var(--black); text-align: center; margin-bottom: 2px; max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: 0.5px; }
   .podium-bills-label { font-family: var(--font-display); font-size: 15px; margin-bottom: 5px; color: var(--black); }
   .podium-stand { width: 100%; border-radius: 6px 6px 0 0; display: flex; align-items: flex-start; justify-content: center; padding-top: 10px; }
-  .podium-medal { font-size: 26px; }
+  .podium-medal { font-size: 28px; }
   .place-1 .podium-stand { height: 130px; background: var(--red); }
   .place-2 .podium-stand { height: 95px; background: #555; }
   .place-3 .podium-stand { height: 65px; background: var(--bronze); }
-  .place-label { font-family: var(--font-display); font-size: 11px; letter-spacing: 1px; margin-bottom: 4px; color: var(--gray-text); }
+  .place-label { font-family: var(--font-display); font-size: 12px; letter-spacing: 1px; margin-bottom: 3px; }
   .place-1 .place-label { color: var(--red); }
   .place-2 .place-label { color: #555; }
   .place-3 .place-label { color: var(--bronze); }
 
-  .divider { height: 2px; background: var(--black); margin-bottom: 12px; }
+  .divider { height: 2px; background: var(--black); margin-bottom: 14px; }
 
-  .rank-row { display: grid; grid-template-columns: 30px 36px 1fr 72px; gap: 8px; align-items: center; padding: 10px 8px; border-radius: var(--radius); margin-bottom: 6px; border: 1.5px solid var(--gray-mid); background: var(--white); }
+  .rank-row { display: grid; grid-template-columns: 34px 34px 1fr 64px; gap: 8px; align-items: center; padding: 10px 8px; border-radius: var(--radius); margin-bottom: 6px; border: 1.5px solid var(--gray-mid); background: var(--white); }
   .rank-row.top1 { border-color: var(--red); background: #fff5f5; }
   .rank-row.top2 { border-color: #999; background: #f8f8f8; }
   .rank-row.top3 { border-color: var(--bronze); background: #fdf8f2; }
-  .rank-pos { font-family: var(--font-display); font-size: 16px; color: var(--gray-text); text-align: center; }
+  .rank-pos { font-family: var(--font-display); font-size: 18px; color: var(--gray-text); text-align: center; }
   .rank-pos.p1 { color: var(--red); }
   .rank-pos.p2 { color: #555; }
   .rank-pos.p3 { color: var(--bronze); }
-  .rank-tnum { width: 30px; height: 30px; background: var(--black); color: var(--white); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 14px; }
-  .rank-name { font-size: 14px; font-weight: 700; color: var(--black); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .rank-bills { font-family: var(--font-display); font-size: 18px; color: var(--black); text-align: right; }
+  .rank-tnum { width: 30px; height: 30px; background: var(--black); color: var(--white); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 15px; }
+  .rank-name { font-size: 15px; font-weight: 700; color: var(--black); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .rank-bills { font-family: var(--font-display); font-size: 20px; color: var(--black); text-align: right; }
 
   .back-btn { width: 100%; margin-top: 16px; padding: 12px; background: transparent; border: 1.5px solid var(--gray-mid); border-radius: var(--radius); font-family: var(--font-body); font-size: 14px; color: var(--gray-text); cursor: pointer; -webkit-tap-highlight-color: transparent; }
   .back-btn:active { background: var(--gray-light); }
@@ -259,13 +270,8 @@
     <div class="logo-text">LA CASA <span class="logo-de">DE</span> PAPEL</div>
   </div>
   <div id="screen">
-    <div>
-      <div class="setup-label">¿CUÁNTOS EQUIPOS?</div>
-      <div class="num-grid">
-        <button class="num-btn" onclick="startGame(4)">4</button><button class="num-btn" onclick="startGame(6)">6</button><button class="num-btn" onclick="startGame(8)">8</button><button class="num-btn" onclick="startGame(10)">10</button><button class="num-btn" onclick="startGame(12)">12</button>
-        <button class="more-btn" onclick="showSetup(true)">MÁS EQUIPOS</button>
-      </div>
-    </div>
+    <div class="setup-label">¿CUÁNTOS EQUIPOS?</div>
+    <div class="num-grid"><button class="num-btn" onclick="startGame(4)">4</button><button class="num-btn" onclick="startGame(6)">6</button><button class="num-btn" onclick="startGame(8)">8</button><button class="num-btn" onclick="startGame(10)">10</button><button class="num-btn" onclick="startGame(12)">12</button><button class="more-btn" onclick="showSetup(true)">MÁS EQUIPOS</button></div>
   </div>
 </div>
 
@@ -276,45 +282,33 @@ function showSetup(extended) {
   const primary = [4, 6, 8, 10, 12];
   const extra = [14, 16, 18, 20, 22, 24];
   const options = extended ? extra : primary;
-
   const btns = options.map(n => `<button class="num-btn" onclick="startGame(${n})">${n}</button>`).join('');
-  const moreOrBack = extended
+  const toggle = extended
     ? `<button class="more-btn" onclick="showSetup(false)">← VOLVER</button>`
     : `<button class="more-btn" onclick="showSetup(true)">MÁS EQUIPOS</button>`;
-
   document.getElementById('screen').innerHTML = `
-    <div>
-      <div class="setup-label">¿CUÁNTOS EQUIPOS?</div>
-      <div class="num-grid">
-        ${btns}
-        ${moreOrBack}
-      </div>
-    </div>
+    <div class="setup-label">¿CUÁNTOS EQUIPOS?</div>
+    <div class="num-grid">${btns}${toggle}</div>
   `;
 }
 
 function startGame(n) {
   teams = Array.from({length: n}, (_, i) => ({ num: i+1, name: '', bills: '' }));
-  showScorer();
+  renderScorer();
 }
 
-function showScorer() {
-  const sorted = [...teams].sort((a, b) => {
-    const bv = b.bills !== '' ? parseInt(b.bills) : -1;
-    const av = a.bills !== '' ? parseInt(a.bills) : -1;
-    if (bv === av) return a.num - b.num;
-    return bv - av;
-  });
-
-  const rowsHtml = sorted.map(t => `
+function renderScorer() {
+  const rowsHtml = teams.map(t => `
     <div class="team-row">
       <div style="display:flex;align-items:center;justify-content:center;">
         <div class="team-num-box">${t.num}</div>
       </div>
-      <input class="team-name-input" type="text" inputmode="text" autocomplete="off" placeholder="Nombre del equipo"
-        value="${escHtml(t.name)}" oninput="updateName(${t.num}, this.value)" />
-      <input class="team-bills-input" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="0"
-        value="${t.bills}" oninput="updateBills(${t.num}, this.value)" />
+      <input class="team-name-input" type="text" inputmode="text" autocomplete="off"
+        placeholder="Nombre" data-num="${t.num}" data-type="name"
+        value="${escHtml(t.name)}" />
+      <input class="team-bills-input" type="number" inputmode="numeric" pattern="[0-9]*" min="0"
+        placeholder="0" data-num="${t.num}" data-type="bills"
+        value="${t.bills}" />
     </div>
   `).join('');
 
@@ -325,23 +319,67 @@ function showScorer() {
       <span class="th">Equipo</span>
       <span class="th th-right">Billetes</span>
     </div>
-    ${rowsHtml}
+    <div id="rows">${rowsHtml}</div>
     <button class="podium-btn" onclick="showPodium()">VER PODIO</button>
   `;
+
+  document.getElementById('rows').addEventListener('input', function(e) {
+    const num = parseInt(e.target.dataset.num);
+    const type = e.target.dataset.type;
+    const team = teams.find(t => t.num === num);
+    if (!team) return;
+    if (type === 'name') {
+      team.name = e.target.value;
+    } else if (type === 'bills') {
+      team.bills = e.target.value;
+      updateOrder();
+    }
+  });
+}
+
+function updateOrder() {
+  const sorted = [...teams].sort((a, b) => {
+    const bv = b.bills !== '' ? parseInt(b.bills) : -1;
+    const av = a.bills !== '' ? parseInt(a.bills) : -1;
+    if (bv === av) return a.num - b.num;
+    return bv - av;
+  });
+  const container = document.getElementById('rows');
+  if (!container) return;
+  sorted.forEach(t => {
+    const row = container.querySelector(`[data-num="${t.num}"][data-type="bills"]`);
+    if (row) container.parentNode && container.appendChild(row.closest('.team-row'));
+  });
+  sorted.forEach(t => {
+    const rows = container.querySelectorAll('.team-row');
+    rows.forEach(row => {
+      const billsInput = row.querySelector('[data-type="bills"]');
+      if (billsInput && parseInt(billsInput.dataset.num) === t.num) {
+        container.appendChild(row);
+      }
+    });
+  });
 }
 
 function escHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function updateName(num, val) { teams.find(t => t.num === num).name = val; }
-
-function updateBills(num, val) {
-  teams.find(t => t.num === num).bills = val;
-  showScorer();
+  return (str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 function showPodium() {
+  const current = [];
+  document.querySelectorAll('.team-row').forEach(row => {
+    const nameInput = row.querySelector('[data-type="name"]');
+    const billsInput = row.querySelector('[data-type="bills"]');
+    if (nameInput && billsInput) {
+      const num = parseInt(nameInput.dataset.num);
+      const team = teams.find(t => t.num === num);
+      if (team) {
+        team.name = nameInput.value;
+        team.bills = billsInput.value;
+      }
+    }
+  });
+
   const sorted = [...teams].sort((a, b) => (parseInt(b.bills)||0) - (parseInt(a.bills)||0));
   const medals = ['🥇','🥈','🥉'];
   const placeLabels = ['1ER PUESTO','2º PUESTO','3ER PUESTO'];
@@ -356,8 +394,7 @@ function showPodium() {
         <div class="podium-name">${escHtml(t.name || 'Equipo ' + t.num)}</div>
         <div class="podium-bills-label">${parseInt(t.bills)||0} B</div>
         <div class="podium-stand"><span class="podium-medal">${medals[rank]}</span></div>
-      </div>
-    `;
+      </div>`;
   }).join('');
 
   const rankingsHtml = sorted.map((t, i) => {
@@ -369,19 +406,16 @@ function showPodium() {
         <div class="rank-tnum">${t.num}</div>
         <span class="rank-name">${escHtml(t.name || 'Equipo ' + t.num)}</span>
         <span class="rank-bills">${parseInt(t.bills)||0}</span>
-      </div>
-    `;
+      </div>`;
   }).join('');
 
   document.getElementById('screen').innerHTML = `
-    <div>
-      <div class="section-label">Podio final</div>
-      <div class="podium-wrap">${podiumHtml}</div>
-      <div class="divider"></div>
-      <div class="section-label">Clasificación</div>
-      <div>${rankingsHtml}</div>
-      <button class="back-btn" onclick="showScorer()">← Volver a editar</button>
-    </div>
+    <div class="section-label">PODIO FINAL</div>
+    <div class="podium-wrap">${podiumHtml}</div>
+    <div class="divider"></div>
+    <div class="section-label">CLASIFICACIÓN</div>
+    ${rankingsHtml}
+    <button class="back-btn" onclick="renderScorer()">← Volver a editar</button>
   `;
 }
 
