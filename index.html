@@ -1,425 +1,191 @@
 <!DOCTYPE html>
-<!-- saved from url=(0031)file:///D:/Descargas/index.html -->
+<!-- saved from url=(0033)file:///D:/Descargas/index_1.html -->
 <html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>La Casa de Papel — Puntuación</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;700;900&display=swap');
-
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;700;900&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --red: #CC0000;
-    --red-dark: #990000;
-    --black: #111111;
-    --white: #FFFFFF;
-    --gray-light: #F4F4F2;
-    --gray-mid: #E0DED8;
-    --gray-text: #888;
-    --bronze: #8B5E2E;
-    --radius: 10px;
-    --font-display: 'Bebas Neue', Impact, sans-serif;
-    --font-body: 'Barlow', 'Helvetica Neue', Arial, sans-serif;
+    --red: #CC0000; --red-dark: #990000;
+    --black: #111; --white: #fff;
+    --gray-light: #F4F4F2; --gray-mid: #E0DED8; --gray-text: #888;
+    --bronze: #8B5E2E; --radius: 10px;
+    --D: 'Bebas Neue', Impact, sans-serif;
+    --B: 'Barlow', Arial, sans-serif;
   }
-
-  body {
-    background: var(--black);
-    font-family: var(--font-body);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  #app {
-    width: 100%;
-    max-width: 480px;
-    min-height: 100vh;
-    background: var(--white);
-    display: flex;
-    flex-direction: column;
-  }
-
-  .header {
-    background: var(--black);
-    padding: 20px 16px 16px;
-    text-align: center;
-    flex-shrink: 0;
-  }
-  .logo-text {
-    font-family: var(--font-display);
-    font-size: 38px;
-    letter-spacing: 2px;
-    color: var(--white);
-    line-height: 1;
-  }
-  .logo-de {
-    background: var(--red);
-    color: var(--white);
-    padding: 2px 10px 0;
-    border-radius: 4px;
-    font-family: var(--font-display);
-    font-size: 34px;
-    margin: 0 4px;
-    display: inline-block;
-    vertical-align: middle;
-  }
-
-  #screen {
-    flex: 1;
-    padding: 20px 16px 32px;
-    background: var(--white);
-  }
+  body { background: var(--black); font-family: var(--B); min-height: 100vh; display: flex; justify-content: center; }
+  #app { width: 100%; max-width: 480px; min-height: 100vh; background: var(--white); display: flex; flex-direction: column; }
+  .header { background: var(--black); padding: 18px 16px 14px; text-align: center; }
+  .logo { font-family: var(--D); font-size: 38px; letter-spacing: 2px; color: var(--white); line-height: 1; }
+  .logo span { background: var(--red); padding: 2px 8px 0; border-radius: 4px; font-size: 34px; margin: 0 3px; display: inline-block; vertical-align: middle; }
+  #screen { flex: 1; padding: 20px 16px 40px; }
 
   /* SETUP */
-  .setup-label {
-    font-family: var(--font-display);
-    font-size: 56px;
-    letter-spacing: 3px;
-    color: var(--black);
-    text-align: center;
-    margin-bottom: 28px;
-    line-height: 1;
-  }
-  .num-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-    max-width: 340px;
-    margin: 0 auto;
-  }
-  .num-btn {
-    background: var(--gray-light);
-    border: 2px solid var(--gray-mid);
-    border-radius: var(--radius);
-    padding: 22px 0;
-    font-family: var(--font-display);
-    font-size: 64px;
-    line-height: 1;
-    color: var(--black);
-    cursor: pointer;
-    transition: all 0.15s;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .num-btn:active {
-    background: var(--red);
-    border-color: var(--red);
-    color: var(--white);
-    transform: scale(0.97);
-  }
-  .more-btn {
-    background: var(--black);
-    border: 2px solid var(--black);
-    border-radius: var(--radius);
-    padding: 22px 8px;
-    font-family: var(--font-display);
-    font-size: 30px;
-    letter-spacing: 1px;
-    line-height: 1.1;
-    color: var(--white);
-    cursor: pointer;
-    transition: all 0.15s;
-    -webkit-tap-highlight-color: transparent;
-    grid-column: span 2;
-  }
-  .more-btn:active {
-    background: var(--red);
-    border-color: var(--red);
-    transform: scale(0.97);
-  }
+  .q { font-family: var(--D); font-size: 56px; letter-spacing: 3px; text-align: center; margin-bottom: 28px; line-height: 1; color: var(--black); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-width: 340px; margin: 0 auto; }
+  .nbtn { background: var(--gray-light); border: 2px solid var(--gray-mid); border-radius: var(--radius); padding: 20px 0; font-family: var(--D); font-size: 64px; line-height: 1; color: var(--black); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .nbtn:active { background: var(--red); border-color: var(--red); color: var(--white); transform: scale(0.97); }
+  .mbtn { grid-column: span 2; background: var(--black); border: 2px solid var(--black); border-radius: var(--radius); padding: 20px 8px; font-family: var(--D); font-size: 30px; letter-spacing: 1px; color: var(--white); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .mbtn:active { background: var(--red); border-color: var(--red); transform: scale(0.97); }
 
   /* SCORER */
-  .back-setup-btn {
-    display: block;
-    width: 100%;
-    margin-bottom: 14px;
-    padding: 10px;
-    background: transparent;
-    border: 1.5px solid var(--gray-mid);
-    border-radius: var(--radius);
-    font-family: var(--font-body);
-    font-size: 14px;
-    color: var(--gray-text);
-    cursor: pointer;
-    text-align: center;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .back-setup-btn:active { background: var(--gray-light); }
-
-  .table-header {
-    display: grid;
-    grid-template-columns: 48px 1fr 96px;
-    gap: 8px;
-    padding: 0 8px 8px;
-    border-bottom: 2px solid var(--black);
-    margin-bottom: 10px;
-  }
-  .th { font-family: var(--font-display); font-size: 16px; letter-spacing: 1px; color: var(--gray-text); }
-  .th-center { text-align: center; }
-  .th-right { text-align: right; }
-
-  .team-row {
-    display: grid;
-    grid-template-columns: 48px 1fr 96px;
-    gap: 8px;
-    align-items: center;
-    padding: 8px;
-    background: var(--white);
-    border: 1.5px solid var(--gray-mid);
-    border-radius: var(--radius);
-    margin-bottom: 8px;
-  }
-  .team-num-box {
-    width: 40px;
-    height: 40px;
-    background: var(--black);
-    color: var(--white);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-display);
-    font-size: 22px;
-    flex-shrink: 0;
-    margin: 0 auto;
-  }
-  .team-name-input, .team-bills-input {
-    background: var(--gray-light);
-    border: 1px solid var(--gray-mid);
-    border-radius: 8px;
-    padding: 10px;
-    font-family: var(--font-body);
-    font-size: 15px;
-    color: var(--black);
-    width: 100%;
-    outline: none;
-  }
-  .team-name-input:focus, .team-bills-input:focus { border-color: var(--red); background: var(--white); }
-  .team-name-input::placeholder, .team-bills-input::placeholder { color: #bbb; }
-  .team-bills-input { text-align: right; font-weight: 700; font-size: 16px; }
-
-  .podium-btn {
-    width: 100%;
-    margin-top: 14px;
-    padding: 18px;
-    background: var(--red);
-    color: var(--white);
-    border: none;
-    border-radius: var(--radius);
-    font-family: var(--font-display);
-    font-size: 28px;
-    letter-spacing: 3px;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .podium-btn:active { background: var(--red-dark); transform: scale(0.98); }
+  .backbtn { display: block; width: 100%; margin-bottom: 14px; padding: 10px; background: transparent; border: 1.5px solid var(--gray-mid); border-radius: var(--radius); font-family: var(--B); font-size: 14px; color: var(--gray-text); cursor: pointer; text-align: center; }
+  .backbtn:active { background: var(--gray-light); }
+  .thead { display: grid; grid-template-columns: 48px 1fr 100px; gap: 8px; padding: 0 8px 8px; border-bottom: 2px solid var(--black); margin-bottom: 10px; }
+  .thead span { font-family: var(--D); font-size: 16px; letter-spacing: 1px; color: var(--gray-text); }
+  .trow { display: grid; grid-template-columns: 48px 1fr 100px; gap: 8px; align-items: center; padding: 8px; border: 1.5px solid var(--gray-mid); border-radius: var(--radius); margin-bottom: 8px; background: var(--white); }
+  .trow:focus-within { border-color: var(--red); }
+  .tnum { width: 40px; height: 40px; background: var(--black); color: var(--white); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: var(--D); font-size: 22px; margin: 0 auto; }
+  .iname, .ibills { background: var(--gray-light); border: 1px solid var(--gray-mid); border-radius: 8px; padding: 10px; font-family: var(--B); font-size: 15px; color: var(--black); width: 100%; outline: none; }
+  .iname:focus, .ibills:focus { border-color: var(--red); background: var(--white); }
+  .iname::placeholder, .ibills::placeholder { color: #bbb; }
+  .ibills { text-align: right; font-weight: 700; font-size: 16px; }
+  .pbtn { width: 100%; margin-top: 14px; padding: 18px; background: var(--red); color: var(--white); border: none; border-radius: var(--radius); font-family: var(--D); font-size: 30px; letter-spacing: 3px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .pbtn:active { background: var(--red-dark); transform: scale(0.98); }
 
   /* PODIUM */
-  .section-label {
-    font-family: var(--font-display);
-    font-size: 22px;
-    letter-spacing: 2px;
-    color: var(--gray-text);
-    text-align: center;
-    margin-bottom: 12px;
-  }
-  .podium-wrap {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    gap: 8px;
-    margin: 8px 0 24px;
-    height: 200px;
-  }
-  .podium-block { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; flex: 1; }
-  .podium-eq-label { font-size: 10px; color: var(--gray-text); margin-bottom: 2px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
-  .podium-name { font-family: var(--font-display); font-size: 16px; color: var(--black); text-align: center; margin-bottom: 2px; max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: 0.5px; }
-  .podium-bills-label { font-family: var(--font-display); font-size: 15px; margin-bottom: 5px; color: var(--black); }
-  .podium-stand { width: 100%; border-radius: 6px 6px 0 0; display: flex; align-items: flex-start; justify-content: center; padding-top: 10px; }
-  .podium-medal { font-size: 28px; }
-  .place-1 .podium-stand { height: 130px; background: var(--red); }
-  .place-2 .podium-stand { height: 95px; background: #555; }
-  .place-3 .podium-stand { height: 65px; background: var(--bronze); }
-  .place-label { font-family: var(--font-display); font-size: 12px; letter-spacing: 1px; margin-bottom: 3px; }
-  .place-1 .place-label { color: var(--red); }
-  .place-2 .place-label { color: #555; }
-  .place-3 .place-label { color: var(--bronze); }
-
+  .slabel { font-family: var(--D); font-size: 26px; letter-spacing: 2px; color: var(--gray-text); text-align: center; margin-bottom: 12px; }
+  .podwrap { display: flex; align-items: flex-end; justify-content: center; gap: 8px; margin: 8px 0 28px; height: 210px; }
+  .pblock { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; flex: 1; }
+  .plabel { font-family: var(--D); font-size: 16px; letter-spacing: 1px; margin-bottom: 3px; }
+  .place-1 .plabel { color: var(--red); }
+  .place-2 .plabel { color: #555; }
+  .place-3 .plabel { color: var(--bronze); }
+  .peq { font-size: 11px; color: var(--gray-text); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .pname { font-family: var(--D); font-size: 18px; letter-spacing: 0.5px; color: var(--black); text-align: center; margin-bottom: 2px; max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pbills { font-family: var(--D); font-size: 16px; margin-bottom: 6px; color: var(--black); }
+  .pstand { width: 100%; border-radius: 6px 6px 0 0; display: flex; align-items: flex-start; justify-content: center; padding-top: 10px; }
+  .pmedal { font-size: 28px; }
+  .place-1 .pstand { height: 130px; background: var(--red); }
+  .place-2 .pstand { height: 95px; background: #555; }
+  .place-3 .pstand { height: 65px; background: var(--bronze); }
   .divider { height: 2px; background: var(--black); margin-bottom: 14px; }
-
-  .rank-row { display: grid; grid-template-columns: 34px 34px 1fr 64px; gap: 8px; align-items: center; padding: 10px 8px; border-radius: var(--radius); margin-bottom: 6px; border: 1.5px solid var(--gray-mid); background: var(--white); }
-  .rank-row.top1 { border-color: var(--red); background: #fff5f5; }
-  .rank-row.top2 { border-color: #999; background: #f8f8f8; }
-  .rank-row.top3 { border-color: var(--bronze); background: #fdf8f2; }
-  .rank-pos { font-family: var(--font-display); font-size: 18px; color: var(--gray-text); text-align: center; }
-  .rank-pos.p1 { color: var(--red); }
-  .rank-pos.p2 { color: #555; }
-  .rank-pos.p3 { color: var(--bronze); }
-  .rank-tnum { width: 30px; height: 30px; background: var(--black); color: var(--white); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 15px; }
-  .rank-name { font-size: 15px; font-weight: 700; color: var(--black); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .rank-bills { font-family: var(--font-display); font-size: 20px; color: var(--black); text-align: right; }
-
-  .back-btn { width: 100%; margin-top: 16px; padding: 12px; background: transparent; border: 1.5px solid var(--gray-mid); border-radius: var(--radius); font-family: var(--font-body); font-size: 14px; color: var(--gray-text); cursor: pointer; -webkit-tap-highlight-color: transparent; }
-  .back-btn:active { background: var(--gray-light); }
+  .rrow { display: grid; grid-template-columns: 36px 36px 1fr 64px; gap: 8px; align-items: center; padding: 10px 8px; border-radius: var(--radius); margin-bottom: 6px; border: 1.5px solid var(--gray-mid); }
+  .rrow.r1 { border-color: var(--red); background: #fff5f5; }
+  .rrow.r2 { border-color: #999; background: #f8f8f8; }
+  .rrow.r3 { border-color: var(--bronze); background: #fdf8f2; }
+  .rpos { font-family: var(--D); font-size: 20px; text-align: center; color: var(--gray-text); }
+  .rpos.p1 { color: var(--red); }
+  .rpos.p2 { color: #555; }
+  .rpos.p3 { color: var(--bronze); }
+  .rtnum { width: 30px; height: 30px; background: var(--black); color: var(--white); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: var(--D); font-size: 15px; }
+  .rname { font-size: 15px; font-weight: 700; color: var(--black); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .rbills { font-family: var(--D); font-size: 22px; color: var(--black); text-align: right; }
+  .backbtn2 { width: 100%; margin-top: 18px; padding: 12px; background: transparent; border: 1.5px solid var(--gray-mid); border-radius: var(--radius); font-family: var(--B); font-size: 14px; color: var(--gray-text); cursor: pointer; }
+  .backbtn2:active { background: var(--gray-light); }
 </style>
 </head>
 <body>
 <div id="app">
   <div class="header">
-    <div class="logo-text">LA CASA <span class="logo-de">DE</span> PAPEL</div>
+    <div class="logo">LA CASA <span>DE</span> PAPEL</div>
   </div>
-  <div id="screen">
-    <div class="setup-label">¿CUÁNTOS EQUIPOS?</div>
-    <div class="num-grid"><button class="num-btn" onclick="startGame(4)">4</button><button class="num-btn" onclick="startGame(6)">6</button><button class="num-btn" onclick="startGame(8)">8</button><button class="num-btn" onclick="startGame(10)">10</button><button class="num-btn" onclick="startGame(12)">12</button><button class="more-btn" onclick="showSetup(true)">MÁS EQUIPOS</button></div>
-  </div>
+  <div id="screen"><div class="q">¿CUÁNTOS EQUIPOS?</div><div class="grid"><button class="nbtn" onclick="start(4)">4</button><button class="nbtn" onclick="start(6)">6</button><button class="nbtn" onclick="start(8)">8</button><button class="nbtn" onclick="start(10)">10</button><button class="nbtn" onclick="start(12)">12</button><button class="mbtn" onclick="setup(true)">MÁS EQUIPOS</button></div></div>
 </div>
-
 <script>
-let teams = [];
+var teams = [];
 
-function showSetup(extended) {
-  const primary = [4, 6, 8, 10, 12];
-  const extra = [14, 16, 18, 20, 22, 24];
-  const options = extended ? extra : primary;
-  const btns = options.map(n => `<button class="num-btn" onclick="startGame(${n})">${n}</button>`).join('');
-  const toggle = extended
-    ? `<button class="more-btn" onclick="showSetup(false)">← VOLVER</button>`
-    : `<button class="more-btn" onclick="showSetup(true)">MÁS EQUIPOS</button>`;
-  document.getElementById('screen').innerHTML = `
-    <div class="setup-label">¿CUÁNTOS EQUIPOS?</div>
-    <div class="num-grid">${btns}${toggle}</div>
-  `;
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function setup(ext){
+  var primary=[4,6,8,10,12], extra=[14,16,18,20,22,24];
+  var opts = ext ? extra : primary;
+  var btns = opts.map(function(n){ return '<button class="nbtn" onclick="start('+n+')">'+n+'</button>'; }).join('');
+  var tog = ext
+    ? '<button class="mbtn" onclick="setup(false)">← VOLVER</button>'
+    : '<button class="mbtn" onclick="setup(true)">MÁS EQUIPOS</button>';
+  document.getElementById('screen').innerHTML =
+    '<div class="q">¿CUÁNTOS EQUIPOS?</div><div class="grid">'+btns+tog+'</div>';
 }
 
-function startGame(n) {
-  teams = Array.from({length: n}, (_, i) => ({ num: i+1, name: '', bills: '' }));
-  renderScorer();
+function start(n){
+  teams = [];
+  for(var i=1;i<=n;i++) teams.push({num:i, name:'', bills:''});
+  scorer();
 }
 
-function renderScorer() {
-  const rowsHtml = teams.map(t => `
-    <div class="team-row">
-      <div style="display:flex;align-items:center;justify-content:center;">
-        <div class="team-num-box">${t.num}</div>
-      </div>
-      <input class="team-name-input" type="text" inputmode="text" autocomplete="off"
-        placeholder="Nombre" data-num="${t.num}" data-type="name"
-        value="${escHtml(t.name)}" />
-      <input class="team-bills-input" type="number" inputmode="numeric" pattern="[0-9]*" min="0"
-        placeholder="0" data-num="${t.num}" data-type="bills"
-        value="${t.bills}" />
-    </div>
-  `).join('');
-
-  document.getElementById('screen').innerHTML = `
-    <button class="back-setup-btn" onclick="showSetup(false)">← Cambiar número de equipos</button>
-    <div class="table-header">
-      <span class="th th-center">#</span>
-      <span class="th">Equipo</span>
-      <span class="th th-right">Billetes</span>
-    </div>
-    <div id="rows">${rowsHtml}</div>
-    <button class="podium-btn" onclick="showPodium()">VER PODIO</button>
-  `;
-
-  document.getElementById('rows').addEventListener('input', function(e) {
-    const num = parseInt(e.target.dataset.num);
-    const type = e.target.dataset.type;
-    const team = teams.find(t => t.num === num);
-    if (!team) return;
-    if (type === 'name') {
-      team.name = e.target.value;
-    } else if (type === 'bills') {
-      team.bills = e.target.value;
-      updateOrder();
-    }
-  });
+function scorer(){
+  var rows = teams.map(function(t){
+    return '<div class="trow">'+
+      '<div style="display:flex;align-items:center;justify-content:center"><div class="tnum">'+t.num+'</div></div>'+
+      '<input class="iname" type="text" inputmode="text" autocomplete="off" placeholder="Nombre" value="'+esc(t.name)+'" onchange="saveName('+t.num+',this.value)">'+
+      '<input class="ibills" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="0" value="'+esc(t.bills)+'" onchange="saveBills('+t.num+',this.value)">'+
+    '</div>';
+  }).join('');
+  document.getElementById('screen').innerHTML =
+    '<button class="backbtn" onclick="setup(false)">← Cambiar número de equipos</button>'+
+    '<div class="thead"><span style="text-align:center">#</span><span>Equipo</span><span style="text-align:right">Billetes</span></div>'+
+    rows+
+    '<button class="pbtn" onclick="collectAndPodium()">VER PODIO</button>';
 }
 
-function updateOrder() {
-  const sorted = [...teams].sort((a, b) => {
-    const bv = b.bills !== '' ? parseInt(b.bills) : -1;
-    const av = a.bills !== '' ? parseInt(a.bills) : -1;
-    if (bv === av) return a.num - b.num;
-    return bv - av;
-  });
-  const container = document.getElementById('rows');
-  if (!container) return;
-  sorted.forEach(t => {
-    const row = container.querySelector(`[data-num="${t.num}"][data-type="bills"]`);
-    if (row) container.parentNode && container.appendChild(row.closest('.team-row'));
-  });
-  sorted.forEach(t => {
-    const rows = container.querySelectorAll('.team-row');
-    rows.forEach(row => {
-      const billsInput = row.querySelector('[data-type="bills"]');
-      if (billsInput && parseInt(billsInput.dataset.num) === t.num) {
-        container.appendChild(row);
-      }
-    });
-  });
+function saveName(num, val){
+  var t = teams.find(function(x){ return x.num===num; });
+  if(t) t.name = val;
 }
 
-function escHtml(str) {
-  return (str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function saveBills(num, val){
+  var t = teams.find(function(x){ return x.num===num; });
+  if(t) t.bills = val;
 }
 
-function showPodium() {
-  const current = [];
-  document.querySelectorAll('.team-row').forEach(row => {
-    const nameInput = row.querySelector('[data-type="name"]');
-    const billsInput = row.querySelector('[data-type="bills"]');
-    if (nameInput && billsInput) {
-      const num = parseInt(nameInput.dataset.num);
-      const team = teams.find(t => t.num === num);
-      if (team) {
-        team.name = nameInput.value;
-        team.bills = billsInput.value;
-      }
-    }
+function collectAndPodium(){
+  // Collect current values from DOM before switching screen
+  document.querySelectorAll('.trow').forEach(function(row){
+    var ni = row.querySelector('.iname');
+    var bi = row.querySelector('.ibills');
+    if(!ni||!bi) return;
+    var num = parseInt(ni.getAttribute('onchange').match(/\d+/)[0]);
+    var t = teams.find(function(x){ return x.num===num; });
+    if(t){ t.name=ni.value; t.bills=bi.value; }
+  });
+  podium();
+}
+
+function podium(){
+  var sorted = teams.slice().sort(function(a,b){
+    return (parseInt(b.bills)||0)-(parseInt(a.bills)||0);
   });
 
-  const sorted = [...teams].sort((a, b) => (parseInt(b.bills)||0) - (parseInt(a.bills)||0));
-  const medals = ['🥇','🥈','🥉'];
-  const placeLabels = ['1ER PUESTO','2º PUESTO','3ER PUESTO'];
-  const podiumOrder = [sorted[1], sorted[0], sorted[2]].filter(Boolean);
+  var medals=['🥇','🥈','🥉'];
+  var plabels=['1ER PUESTO','2º PUESTO','3ER PUESTO'];
+  // podium visual order: 2nd left, 1st center, 3rd right
+  var podOrder = [sorted[1],sorted[0],sorted[2]].filter(Boolean);
 
-  const podiumHtml = podiumOrder.map(t => {
-    const rank = sorted.indexOf(t);
-    return `
-      <div class="podium-block place-${rank+1}">
-        <div class="place-label">${placeLabels[rank]}</div>
-        <div class="podium-eq-label">Equipo ${t.num}</div>
-        <div class="podium-name">${escHtml(t.name || 'Equipo ' + t.num)}</div>
-        <div class="podium-bills-label">${parseInt(t.bills)||0} B</div>
-        <div class="podium-stand"><span class="podium-medal">${medals[rank]}</span></div>
-      </div>`;
+  var podHtml = podOrder.map(function(t){
+    var rank = sorted.indexOf(t);
+    return '<div class="pblock place-'+(rank+1)+'">'+
+      '<div class="plabel">'+plabels[rank]+'</div>'+
+      '<div class="peq">Equipo '+t.num+'</div>'+
+      '<div class="pname">'+esc(t.name||'Equipo '+t.num)+'</div>'+
+      '<div class="pbills">'+(parseInt(t.bills)||0)+' B</div>'+
+      '<div class="pstand"><span class="pmedal">'+medals[rank]+'</span></div>'+
+    '</div>';
   }).join('');
 
-  const rankingsHtml = sorted.map((t, i) => {
-    const posClass = i === 0 ? 'p1' : i === 1 ? 'p2' : i === 2 ? 'p3' : '';
-    const rowClass = i === 0 ? 'top1' : i === 1 ? 'top2' : i === 2 ? 'top3' : '';
-    return `
-      <div class="rank-row ${rowClass}">
-        <span class="rank-pos ${posClass}">${i+1}º</span>
-        <div class="rank-tnum">${t.num}</div>
-        <span class="rank-name">${escHtml(t.name || 'Equipo ' + t.num)}</span>
-        <span class="rank-bills">${parseInt(t.bills)||0}</span>
-      </div>`;
+  var rankHtml = sorted.map(function(t,i){
+    var pc = i===0?'p1':i===1?'p2':i===2?'p3':'';
+    var rc = i===0?'r1':i===1?'r2':i===2?'r3':'';
+    return '<div class="rrow '+rc+'">'+
+      '<span class="rpos '+pc+'">'+(i+1)+'º</span>'+
+      '<div class="rtnum">'+t.num+'</div>'+
+      '<span class="rname">'+esc(t.name||'Equipo '+t.num)+'</span>'+
+      '<span class="rbills">'+(parseInt(t.bills)||0)+'</span>'+
+    '</div>';
   }).join('');
 
-  document.getElementById('screen').innerHTML = `
-    <div class="section-label">PODIO FINAL</div>
-    <div class="podium-wrap">${podiumHtml}</div>
-    <div class="divider"></div>
-    <div class="section-label">CLASIFICACIÓN</div>
-    ${rankingsHtml}
-    <button class="back-btn" onclick="renderScorer()">← Volver a editar</button>
-  `;
+  document.getElementById('screen').innerHTML =
+    '<div class="slabel">PODIO FINAL</div>'+
+    '<div class="podwrap">'+podHtml+'</div>'+
+    '<div class="divider"></div>'+
+    '<div class="slabel">CLASIFICACIÓN</div>'+
+    rankHtml+
+    '<button class="backbtn2" onclick="scorer()">← Volver a editar</button>';
 }
 
-showSetup(false);
+setup(false);
 </script>
 
 
