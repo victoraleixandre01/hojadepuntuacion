@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0033)file:///D:/Descargas/index_6.html -->
+<!-- saved from url=(0033)file:///D:/Descargas/index_8.html -->
 <html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -45,35 +45,15 @@
   .pbtn { width: 100%; margin-top: 16px; padding: 20px; background: var(--red); color: var(--white); border: none; border-radius: var(--radius); font-family: var(--D); font-size: 34px; letter-spacing: 3px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
   .pbtn:active { background: var(--red-dark); transform: scale(0.98); }
 
-  /* PODIO ESCALERA */
+  /* SECCIÓN TÍTULO */
   .slabel { font-family: var(--D); font-size: 52px; letter-spacing: 3px; color: var(--gray-text); text-align: center; margin-bottom: 20px; }
-  .escalera { display: flex; align-items: flex-end; justify-content: center; gap: 4px; margin: 8px 0 36px; width: 100%; }
-  .eblock { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; flex: 1; min-width: 0; }
-  .eplabel { font-family: var(--D); font-size: 22px; letter-spacing: 1px; margin-bottom: 4px; text-align: center; white-space: nowrap; }
-  .eeq { font-size: 12px; color: var(--gray-text); margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.5px; text-align: center; }
-  .ename { font-family: var(--D); font-size: 22px; letter-spacing: 1px; color: var(--black); text-align: center; margin-bottom: 3px; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 2px; text-transform: uppercase; }
-  .ebills { font-family: var(--D); font-size: 26px; margin-bottom: 6px; color: var(--black); text-align: center; }
-  .estand { width: 100%; border-radius: 4px 4px 0 0; display: flex; align-items: flex-start; justify-content: center; padding-top: 10px; }
-  .emedal { font-size: 46px; }
-
-  .estand-1    { background: var(--red); }
-  .estand-2    { background: #555; }
-  .estand-3    { background: var(--bronze); }
-  .estand-last { background: #999; }
-  .estand-mid  { background: #bbb; }
-
-  .plabel-1    { color: var(--red); }
-  .plabel-2    { color: #555; }
-  .plabel-3    { color: var(--bronze); }
-  .plabel-last { color: #777; }
-  .plabel-mid  { color: #aaa; }
 
   /* CLASIFICACIÓN */
   .divider { height: 2px; background: var(--black); margin-bottom: 16px; }
   .rrow { display: grid; grid-template-columns: 44px 52px 1fr 80px; gap: 10px; align-items: center; padding: 12px 10px; border-radius: var(--radius); margin-bottom: 8px; border: 1.5px solid var(--gray-mid); }
-  .rrow.r1 { border-color: var(--red); background: #fff5f5; }
-  .rrow.r2 { border-color: #999; background: #f8f8f8; }
-  .rrow.r3 { border-color: var(--bronze); background: #fdf8f2; }
+  .rrow.r1 { border-color: var(--red); background: #ffd9d9; }
+  .rrow.r2 { border-color: #999; background: #e0e0e0; }
+  .rrow.r3 { border-color: var(--bronze); background: #f5e0c0; }
   .rpos { font-family: var(--B); font-size: 20px; font-weight: 900; text-align: center; color: var(--gray-text); }
   .rpos.p1 { color: var(--red); }
   .rpos.p2 { color: #555; }
@@ -152,35 +132,66 @@ function collectAndPodium(){
   podium();
 }
 
+function ordinal(n){
+  return n===1?'1ER PUESTO': n+'º PUESTO';
+}
+
+function assignRanks(sorted){
+  // returns array of rank numbers (1-based), handling ties
+  var ranks = [];
+  for(var i=0;i<sorted.length;i++){
+    if(i===0){
+      ranks.push(1);
+    } else {
+      var prevBills = parseInt(sorted[i-1].bills)||0;
+      var curBills  = parseInt(sorted[i].bills)||0;
+      ranks.push(prevBills===curBills ? ranks[i-1] : i+1);
+    }
+  }
+  return ranks;
+}
+
 function podium(){
   var n = teams.length;
   var sorted = teams.slice().sort(function(a,b){
     return (parseInt(b.bills)||0)-(parseInt(a.bills)||0);
   });
+  var ranks = assignRanks(sorted);
 
+  // build escalera: reversed (last -> first)
   var escOrder = sorted.slice().reverse();
+  var escRanks = ranks.slice().reverse();
   var totalSteps = escOrder.length;
   var minH = 30, maxH = 180;
 
   var podHtml = escOrder.map(function(t, vi){
-    var rank = sorted.indexOf(t);
+    var rank = escRanks[vi]; // 1-based rank
+    var sortedIdx = sorted.indexOf(t);
     var height = Math.round(minH + (maxH - minH) * (vi / (totalSteps - 1 || 1)));
 
+    // detect tie: does anyone else share this rank?
+    var isTie = ranks.filter(function(r){ return r===rank; }).length > 1;
+
     var standClass, labelClass, label, medal;
-    if(rank === 0){
-      standClass='estand-1'; labelClass='plabel-1'; label='1ER PUESTO'; medal='🥇';
-    } else if(rank === 1){
-      standClass='estand-2'; labelClass='plabel-2'; label='2º PUESTO'; medal='🥈';
+    if(rank === 1){
+      standClass='estand-1'; labelClass='plabel-1';
+      label = isTie ? 'EMPATE 1ER PUESTO' : '1ER PUESTO'; medal='🥇';
     } else if(rank === 2){
-      standClass='estand-3'; labelClass='plabel-3'; label='3ER PUESTO'; medal='🥉';
-    } else if(rank === n-1){
-      standClass='estand-last'; labelClass='plabel-last'; label='ÚLTIMO'; medal='';
+      standClass='estand-2'; labelClass='plabel-2';
+      label = isTie ? 'EMPATE 2º PUESTO' : '2º PUESTO'; medal='🥈';
+    } else if(rank === 3){
+      standClass='estand-3'; labelClass='plabel-3';
+      label = isTie ? 'EMPATE 3ER PUESTO' : '3ER PUESTO'; medal='🥉';
+    } else if(sortedIdx === n-1){
+      standClass='estand-last'; labelClass='plabel-last';
+      label = isTie ? 'EMPATE ÚLTIMO' : 'ÚLTIMO'; medal='';
     } else {
-      standClass='estand-mid'; labelClass='plabel-mid'; label=(rank+1)+'º'; medal='';
+      standClass='estand-mid'; labelClass='plabel-mid';
+      label = isTie ? 'EMPATE '+rank+'º' : rank+'º'; medal='';
     }
 
     return '<div class="eblock">'+
-      '<div class="eplabel '+labelClass+'">'+label+'</div>'+
+      '<div class="eplabel '+labelClass+'" style="font-size:'+(isTie?'14px':'22px')+'">'+label+'</div>'+
       '<div class="eeq">Eq. '+t.num+'</div>'+
       '<div class="ename">'+(t.name ? esc(t.name) : 'EQUIPO '+t.num)+'</div>'+
       '<div class="ebills">'+(parseInt(t.bills)||0)+'</div>'+
@@ -190,24 +201,34 @@ function podium(){
     '</div>';
   }).join('');
 
+  // ranking rows with tie labels
   var rankHtml = sorted.map(function(t,i){
-    var pc = i===0?'p1':i===1?'p2':i===2?'p3':'';
-    var rc = i===0?'r1':i===1?'r2':i===2?'r3':'';
+    var rank = ranks[i];
+    var isTie = ranks.filter(function(r){ return r===rank; }).length > 1;
+    var pc = rank===1?'p1':rank===2?'p2':rank===3?'p3':'';
+    var rc = rank===1?'r1':rank===2?'r2':rank===3?'r3':'';
+
+    var posLabel;
+    if(isTie){
+      posLabel = rank===1?'=1º': rank===2?'=2º': rank===3?'=3º': '='+rank+'º';
+    } else {
+      posLabel = rank+'º';
+    }
+
+    var tieTag = isTie ? '<span style="font-family:var(--B);font-size:11px;font-weight:900;background:#f0ad00;color:#fff;border-radius:4px;padding:2px 6px;margin-left:6px;letter-spacing:0.5px;vertical-align:middle">EMPATE</span>' : '';
+
     return '<div class="rrow '+rc+'">'+
-      '<span class="rpos '+pc+'">'+(i+1)+'º</span>'+
+      '<span class="rpos '+pc+'">'+posLabel+'</span>'+
       '<div class="rtnum">'+t.num+'</div>'+
-      '<span class="rname">'+(t.name ? esc(t.name) : 'EQUIPO '+t.num)+'</span>'+
+      '<span class="rname">'+(t.name ? esc(t.name) : 'EQUIPO '+t.num)+tieTag+'</span>'+
       '<span class="rbills">'+(parseInt(t.bills)||0)+'</span>'+
     '</div>';
   }).join('');
 
   document.getElementById('screen').innerHTML =
-    '<div class="slabel">PODIO FINAL</div>'+
-    '<div class="escalera">'+podHtml+'</div>'+
-    '<div class="divider"></div>'+
-    '<div class="slabel">CLASIFICACIÓN</div>'+
+    '<div class="slabel">CLASIFICACIÓN FINAL</div>'+
     rankHtml+
-    '<button class="backbtn2" onclick="scorer()">← Volver a editar</button>';
+    '<button class="backbtn2" onclick="scorer()">← VOLVER A EDITAR</button>';
 }
 
 setup(false);
