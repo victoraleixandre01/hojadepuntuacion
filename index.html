@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0033)file:///D:/Descargas/index_3.html -->
+<!-- saved from url=(0033)file:///D:/Descargas/index_4.html -->
 <html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -38,10 +38,10 @@
   .trow { display: grid; grid-template-columns: 52px 1fr 110px; gap: 10px; align-items: center; padding: 10px; border: 1.5px solid var(--gray-mid); border-radius: var(--radius); margin-bottom: 10px; background: var(--white); }
   .trow:focus-within { border-color: var(--red); }
   .tnum { width: 44px; height: 44px; background: var(--black); color: var(--white); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: var(--D); font-size: 24px; margin: 0 auto; }
-  .iname, .ibills { background: var(--gray-light); border: 1px solid var(--gray-mid); border-radius: 8px; padding: 11px 12px; font-family: var(--B); font-size: 16px; color: var(--black); width: 100%; outline: none; }
+  .iname { background: var(--gray-light); border: 1px solid var(--gray-mid); border-radius: 8px; padding: 11px 12px; font-family: var(--D); font-size: 20px; letter-spacing: 1px; color: var(--black); width: 100%; outline: none; text-transform: uppercase; }
+  .ibills { background: var(--gray-light); border: 1px solid var(--gray-mid); border-radius: 8px; padding: 11px 12px; font-family: var(--D); font-size: 22px; color: var(--black); width: 100%; outline: none; text-align: right; }
   .iname:focus, .ibills:focus { border-color: var(--red); background: var(--white); }
   .iname::placeholder, .ibills::placeholder { color: #bbb; }
-  .ibills { text-align: right; font-weight: 700; font-size: 17px; }
   .pbtn { width: 100%; margin-top: 16px; padding: 20px; background: var(--red); color: var(--white); border: none; border-radius: var(--radius); font-family: var(--D); font-size: 34px; letter-spacing: 3px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
   .pbtn:active { background: var(--red-dark); transform: scale(0.98); }
 
@@ -51,8 +51,8 @@
   .eblock { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; flex: 1; min-width: 0; }
   .eplabel { font-family: var(--D); font-size: 22px; letter-spacing: 1px; margin-bottom: 4px; text-align: center; white-space: nowrap; }
   .eeq { font-size: 12px; color: var(--gray-text); margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.5px; text-align: center; }
-  .ename { font-family: var(--D); font-size: 18px; letter-spacing: 0.5px; color: var(--black); text-align: center; margin-bottom: 3px; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 2px; }
-  .ebills { font-family: var(--D); font-size: 16px; margin-bottom: 6px; color: var(--black); text-align: center; }
+  .ename { font-family: var(--D); font-size: 22px; letter-spacing: 1px; color: var(--black); text-align: center; margin-bottom: 3px; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 2px; text-transform: uppercase; }
+  .ebills { font-family: var(--D); font-size: 26px; margin-bottom: 6px; color: var(--black); text-align: center; }
   .estand { width: 100%; border-radius: 4px 4px 0 0; display: flex; align-items: flex-start; justify-content: center; padding-top: 10px; }
   .emedal { font-size: 46px; }
 
@@ -79,8 +79,8 @@
   .rpos.p2 { color: #555; }
   .rpos.p3 { color: var(--bronze); }
   .rtnum { width: 34px; height: 34px; background: var(--black); color: var(--white); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: var(--D); font-size: 17px; }
-  .rname { font-size: 16px; font-weight: 700; color: var(--black); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .rbills { font-family: var(--D); font-size: 24px; color: var(--black); text-align: right; }
+  .rname { font-family: var(--D); font-size: 20px; letter-spacing: 0.5px; color: var(--black); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-transform: uppercase; }
+  .rbills { font-family: var(--D); font-size: 26px; color: var(--black); text-align: right; }
   .backbtn2 { width: 100%; margin-top: 20px; padding: 14px; background: transparent; border: 1.5px solid var(--gray-mid); border-radius: var(--radius); font-family: var(--B); font-size: 15px; color: var(--gray-text); cursor: pointer; }
   .backbtn2:active { background: var(--gray-light); }
 </style>
@@ -118,7 +118,7 @@ function scorer(){
   var rows = teams.map(function(t){
     return '<div class="trow">'+
       '<div style="display:flex;align-items:center;justify-content:center"><div class="tnum">'+t.num+'</div></div>'+
-      '<input class="iname" type="text" inputmode="text" autocomplete="off" placeholder="Nombre" value="'+esc(t.name)+'" onchange="saveName('+t.num+',this.value)">'+
+      '<input class="iname" type="text" inputmode="text" autocomplete="off" placeholder="NOMBRE" value="'+esc(t.name)+'" onchange="saveName('+t.num+',this.value)">'+
       '<input class="ibills" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="0" value="'+esc(t.bills)+'" onchange="saveBills('+t.num+',this.value)">'+
     '</div>';
   }).join('');
@@ -131,7 +131,7 @@ function scorer(){
 
 function saveName(num, val){
   var t = teams.find(function(x){ return x.num===num; });
-  if(t) t.name = val;
+  if(t) t.name = val.toUpperCase();
 }
 function saveBills(num, val){
   var t = teams.find(function(x){ return x.num===num; });
@@ -147,7 +147,7 @@ function collectAndPodium(){
     if(!m) return;
     var num = parseInt(m[0]);
     var t = teams.find(function(x){ return x.num===num; });
-    if(t){ t.name=ni.value; t.bills=bi.value; }
+    if(t){ t.name=ni.value.toUpperCase(); t.bills=bi.value; }
   });
   podium();
 }
@@ -158,7 +158,6 @@ function podium(){
     return (parseInt(b.bills)||0)-(parseInt(a.bills)||0);
   });
 
-  // escalera: izquierda=último, derecha=primero
   var escOrder = sorted.slice().reverse();
   var totalSteps = escOrder.length;
   var minH = 30, maxH = 180;
@@ -183,8 +182,8 @@ function podium(){
     return '<div class="eblock">'+
       '<div class="eplabel '+labelClass+'">'+label+'</div>'+
       '<div class="eeq">Eq. '+t.num+'</div>'+
-      '<div class="ename">'+esc(t.name||'Equipo '+t.num)+'</div>'+
-      '<div class="ebills">'+(parseInt(t.bills)||0)+'B</div>'+
+      '<div class="ename">'+(t.name ? esc(t.name) : 'EQUIPO '+t.num)+'</div>'+
+      '<div class="ebills">'+(parseInt(t.bills)||0)+'</div>'+
       '<div class="estand '+standClass+'" style="height:'+height+'px">'+
         (medal ? '<span class="emedal">'+medal+'</span>' : '')+
       '</div>'+
@@ -197,7 +196,7 @@ function podium(){
     return '<div class="rrow '+rc+'">'+
       '<span class="rpos '+pc+'">'+(i+1)+'º</span>'+
       '<div class="rtnum">'+t.num+'</div>'+
-      '<span class="rname">'+esc(t.name||'Equipo '+t.num)+'</span>'+
+      '<span class="rname">'+(t.name ? esc(t.name) : 'EQUIPO '+t.num)+'</span>'+
       '<span class="rbills">'+(parseInt(t.bills)||0)+'</span>'+
     '</div>';
   }).join('');
