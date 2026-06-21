@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0034)file:///D:/Descargas/index_15.html -->
+<!-- saved from url=(0034)file:///D:/Descargas/index_23.html -->
 <html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -17,9 +17,10 @@
   }
   body { background: var(--black); font-family: var(--B); min-height: 100vh; display: flex; justify-content: center; }
   #app { width: 100%; max-width: 900px; min-height: 100vh; background: var(--white); display: flex; flex-direction: column; }
-  .header { background: var(--black); padding: 20px 24px 16px; text-align: center; }
+  .header { background: var(--black); padding: 20px 24px 16px; text-align: center; position: relative; }
   .logo { font-family: var(--D); font-size: 48px; letter-spacing: 3px; color: var(--white); line-height: 1; }
   .logo span { background: var(--red); padding: 2px 10px 0; border-radius: 4px; font-size: 42px; margin: 0 4px; display: inline-block; vertical-align: middle; }
+  .live { font-family: var(--B); font-size: 11px; letter-spacing: 1px; color: #4caf50; margin-top: 6px; opacity: 0.9; }
   #screen { flex: 1; padding: 24px 24px 48px; }
 
   /* SETUP */
@@ -63,84 +64,167 @@
   .rbills { font-family: var(--B); font-size: 26px; font-weight: 900; color: var(--black); text-align: right; }
   .backbtn2 { width: 100%; margin-top: 20px; padding: 18px; background: transparent; border: 2px solid var(--black); border-radius: var(--radius); font-family: var(--D); font-size: 28px; letter-spacing: 2px; color: var(--black); cursor: pointer; }
   .backbtn2:active { background: var(--gray-light); }
+  .resetbtn { width: 100%; margin-top: 12px; padding: 18px; background: var(--red); border: 2px solid var(--red); border-radius: var(--radius); font-family: var(--D); font-size: 26px; letter-spacing: 2px; color: var(--white); cursor: pointer; }
+  .resetbtn:active { background: var(--red-dark); }
 </style>
 </head>
 <body>
 <div id="app">
   <div class="header">
     <div class="logo">LA CASA <span>DE</span> PAPEL</div>
+    <div class="live" id="liveIndicator">● EN VIVO</div>
   </div>
-  <div id="screen"><div class="q">¿CUÁNTOS EQUIPOS?</div><div class="grid"><button class="nbtn" onclick="start(4)">4</button><button class="nbtn" onclick="start(6)">6</button><button class="nbtn" onclick="start(8)">8</button><button class="nbtn" onclick="start(10)">10</button><button class="nbtn" onclick="start(12)">12</button><button class="mbtn" onclick="setup(true)">MÁS EQUIPOS</button></div></div>
+  <div id="screen"><div class="q">¿CUÁNTOS EQUIPOS?</div><div class="grid"><button class="nbtn" onclick="startGame(4)">4</button><button class="nbtn" onclick="startGame(6)">6</button><button class="nbtn" onclick="startGame(8)">8</button><button class="nbtn" onclick="startGame(10)">10</button><button class="nbtn" onclick="startGame(12)">12</button><button class="mbtn" onclick="renderSetup(true)">MÁS EQUIPOS</button></div></div>
 </div>
+
+<!-- Firebase SDK -->
+<script src="./index_files/firebase-app-compat.js.descarga"></script>
+<script src="./index_files/firebase-database-compat.js.descarga"></script>
+
 <script>
+var firebaseConfig = {
+  apiKey: "AIzaSyCpH9PQaCWV9lHCbx7wBRTwVzfgaHdmqyE",
+  authDomain: "hoja-de-puntuacion-f5268.firebaseapp.com",
+  databaseURL: "https://hoja-de-puntuacion-f5268-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "hoja-de-puntuacion-f5268",
+  storageBucket: "hoja-de-puntuacion-f5268.firebasestorage.app",
+  messagingSenderId: "827563821994",
+  appId: "1:827563821994:web:1abffebb7e56319393b9d3"
+};
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
+var sessionRef = db.ref('session');
+
 var teams = [];
+var currentScreen = 'loading'; // loading | setup | scorer | podium
 
 function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-function setup(ext){
+/* ---------- CONEXIÓN EN TIEMPO REAL ---------- */
+sessionRef.on('value', function(snapshot){
+  var data = snapshot.val();
+  document.getElementById('liveIndicator').textContent = '● EN VIVO';
+
+  if(!data || !data.numTeams){
+    // No hay sesión activa -> pantalla de inicio
+    if(currentScreen !== 'setup'){
+      teams = [];
+      currentScreen = 'setup';
+      renderSetup(false);
+    }
+    return;
+  }
+
+  var n = data.numTeams;
+
+  if(currentScreen === 'setup' || currentScreen === 'loading' || teams.length !== n){
+    // (re)construir el array local de equipos
+    teams = [];
+    for(var i=1;i<=n;i++){
+      var rt = data.teams && data.teams[i];
+      teams.push({ num:i, name:(rt&&rt.name)||'', bills:(rt&&rt.bills!==undefined?rt.bills:'') });
+    }
+    currentScreen = 'scorer';
+    renderScorerDOM();
+    return;
+  }
+
+  if(currentScreen === 'scorer'){
+    applyRemoteTeams(data.teams||{});
+  } else if(currentScreen === 'podium'){
+    teams.forEach(function(t){
+      var rt = data.teams && data.teams[t.num];
+      if(rt){
+        t.name = rt.name||'';
+        t.bills = rt.bills!==undefined?rt.bills:'';
+      }
+    });
+    renderPodium();
+  }
+});
+
+/* ---------- PANTALLA SETUP ---------- */
+function renderSetup(ext){
   var primary=[4,6,8,10,12], extra=[14,16,18,20,22,24];
   var opts = ext ? extra : primary;
-  var btns = opts.map(function(n){ return '<button class="nbtn" onclick="start('+n+')">'+n+'</button>'; }).join('');
+  var btns = opts.map(function(n){ return '<button class="nbtn" onclick="startGame('+n+')">'+n+'</button>'; }).join('');
   var tog = ext
-    ? '<button class="mbtn" onclick="setup(false)">← VOLVER</button>'
-    : '<button class="mbtn" onclick="setup(true)">MÁS EQUIPOS</button>';
+    ? '<button class="mbtn" onclick="renderSetup(false)">← VOLVER</button>'
+    : '<button class="mbtn" onclick="renderSetup(true)">MÁS EQUIPOS</button>';
   document.getElementById('screen').innerHTML =
     '<div class="q">¿CUÁNTOS EQUIPOS?</div><div class="grid">'+btns+tog+'</div>';
 }
 
-function start(n){
-  teams = [];
-  for(var i=1;i<=n;i++) teams.push({num:i, name:'', bills:''});
-  scorer();
+function startGame(n){
+  var initTeams = {};
+  for(var i=1;i<=n;i++) initTeams[i] = { name:'', bills:'' };
+  sessionRef.set({ numTeams: n, teams: initTeams });
+  // el listener onValue se encargará de pasar a la pantalla de marcador en todos los dispositivos
 }
 
-function scorer(){
+/* ---------- PANTALLA SCORER (marcador) ---------- */
+function renderScorerDOM(){
   var rows = teams.map(function(t){
-    return '<div class="trow">'+
+    return '<div class="trow" data-num="'+t.num+'">'+
       '<div style="display:flex;align-items:center;justify-content:center"><div class="tnum">'+t.num+'</div></div>'+
-      '<input class="iname" type="text" inputmode="text" autocomplete="off" placeholder="NOMBRE" value="'+esc(t.name)+'" onchange="saveName('+t.num+',this.value)">'+
-      '<input class="ibills" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="0" value="'+esc(t.bills)+'" onchange="saveBills('+t.num+',this.value)">'+
+      '<input class="iname" data-num="'+t.num+'" data-type="name" type="text" inputmode="text" autocomplete="off" placeholder="NOMBRE" value="'+esc(t.name)+'">'+
+      '<input class="ibills" data-num="'+t.num+'" data-type="bills" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="0" value="'+esc(t.bills)+'">'+
     '</div>';
   }).join('');
+
   document.getElementById('screen').innerHTML =
-    '<button class="backbtn" onclick="setup(false)">← Cambiar número de equipos</button>'+
+    '<button class="backbtn" onclick="resetSession()">← Cambiar número de equipos</button>'+
     '<div class="thead"><span style="text-align:center">#</span><span>Equipo</span><span style="text-align:right">Billetes</span></div>'+
-    rows+
-    '<button class="pbtn" onclick="collectAndPodium()">VER PODIO</button>';
+    '<div id="rowsWrap">'+rows+'</div>'+
+    '<button class="pbtn" onclick="goPodium()">VER CLASIFICACIÓN</button>';
+
+  document.getElementById('rowsWrap').addEventListener('input', function(e){
+    var num = e.target.getAttribute('data-num');
+    var type = e.target.getAttribute('data-type');
+    if(!num || !type) return;
+    var val = e.target.value;
+    if(type === 'name'){
+      val = val.toUpperCase();
+      e.target.value = val;
+    }
+    var t = teams.find(function(x){ return x.num === parseInt(num); });
+    if(t) t[type] = val;
+    sessionRef.child('teams/'+num+'/'+type).set(val);
+  });
 }
 
-function saveName(num, val){
-  var t = teams.find(function(x){ return x.num===num; });
-  if(t) t.name = val.toUpperCase();
-}
-function saveBills(num, val){
-  var t = teams.find(function(x){ return x.num===num; });
-  if(t) t.bills = val;
-}
-
-function collectAndPodium(){
-  document.querySelectorAll('.trow').forEach(function(row){
+function applyRemoteTeams(remoteTeams){
+  teams.forEach(function(t){
+    var remote = remoteTeams[t.num];
+    if(!remote) return;
+    var row = document.querySelector('.trow[data-num="'+t.num+'"]');
+    if(!row) return;
     var ni = row.querySelector('.iname');
     var bi = row.querySelector('.ibills');
-    if(!ni||!bi) return;
-    var m = ni.getAttribute('onchange').match(/\d+/);
-    if(!m) return;
-    var num = parseInt(m[0]);
-    var t = teams.find(function(x){ return x.num===num; });
-    if(t){ t.name=ni.value.toUpperCase(); t.bills=bi.value; }
+    if(remote.name !== undefined){
+      t.name = remote.name;
+      if(ni && document.activeElement !== ni) ni.value = remote.name;
+    }
+    if(remote.bills !== undefined){
+      t.bills = remote.bills;
+      if(bi && document.activeElement !== bi) bi.value = remote.bills;
+    }
   });
-  podium();
 }
 
-function ordinal(n){
-  return n===1?'1ER PUESTO': n+'º PUESTO';
+function resetSession(){
+  if(!confirm('¿Borrar la partida actual para todos y empezar de nuevo?')) return;
+  sessionRef.set(null);
+}
+
+/* ---------- PANTALLA CLASIFICACIÓN ---------- */
+function goPodium(){
+  currentScreen = 'podium';
+  renderPodium();
 }
 
 function assignRanks(sorted){
-  // Dense ranking: ties share same rank, next team gets next consecutive rank
-  // e.g. 1st, =2nd, =2nd, 3rd, 4th (not 4th after two 2nds)
   var ranks = [];
-  var currentRank = 1;
   for(var i=0;i<sorted.length;i++){
     if(i===0){
       ranks.push(1);
@@ -148,76 +232,27 @@ function assignRanks(sorted){
       var prevBills = parseInt(sorted[i-1].bills)||0;
       var curBills  = parseInt(sorted[i].bills)||0;
       if(prevBills===curBills){
-        ranks.push(ranks[i-1]); // same rank
+        ranks.push(ranks[i-1]);
       } else {
-        // next consecutive rank after the tie group
-        var prevRank = ranks[i-1];
-        ranks.push(prevRank + 1);
+        ranks.push(ranks[i-1] + 1);
       }
     }
   }
   return ranks;
 }
 
-function podium(){
-  var n = teams.length;
+function renderPodium(){
   var sorted = teams.slice().sort(function(a,b){
     return (parseInt(b.bills)||0)-(parseInt(a.bills)||0);
   });
   var ranks = assignRanks(sorted);
 
-  // build escalera: reversed (last -> first)
-  var escOrder = sorted.slice().reverse();
-  var escRanks = ranks.slice().reverse();
-  var totalSteps = escOrder.length;
-  var minH = 30, maxH = 180;
-
-  var podHtml = escOrder.map(function(t, vi){
-    var rank = escRanks[vi]; // 1-based rank
-    var sortedIdx = sorted.indexOf(t);
-    var height = Math.round(minH + (maxH - minH) * (vi / (totalSteps - 1 || 1)));
-
-    // detect tie: does anyone else share this rank?
-    var isTie = ranks.filter(function(r){ return r===rank; }).length > 1;
-
-    var standClass, labelClass, label, medal;
-    if(rank === 1){
-      standClass='estand-1'; labelClass='plabel-1';
-      label = isTie ? 'EMPATE 1ER PUESTO' : '1ER PUESTO'; medal='🥇';
-    } else if(rank === 2){
-      standClass='estand-2'; labelClass='plabel-2';
-      label = isTie ? 'EMPATE 2º PUESTO' : '2º PUESTO'; medal='🥈';
-    } else if(rank === 3){
-      standClass='estand-3'; labelClass='plabel-3';
-      label = isTie ? 'EMPATE 3ER PUESTO' : '3ER PUESTO'; medal='🥉';
-    } else if(sortedIdx === n-1){
-      standClass='estand-last'; labelClass='plabel-last';
-      label = isTie ? 'EMPATE ÚLTIMO' : 'ÚLTIMO'; medal='';
-    } else {
-      standClass='estand-mid'; labelClass='plabel-mid';
-      label = isTie ? 'EMPATE '+rank+'º' : rank+'º'; medal='';
-    }
-
-    return '<div class="eblock">'+
-      '<div class="eplabel '+labelClass+'" style="font-size:'+(isTie?'14px':'22px')+'">'+label+'</div>'+
-      '<div class="eeq">Eq. '+t.num+'</div>'+
-      '<div class="ename">'+(t.name ? esc(t.name) : 'EQUIPO '+t.num)+'</div>'+
-      '<div class="ebills">'+(parseInt(t.bills)||0)+'</div>'+
-      '<div class="estand '+standClass+'" style="height:'+height+'px">'+
-        (medal ? '<span class="emedal">'+medal+'</span>' : '')+
-      '</div>'+
-    '</div>';
-  }).join('');
-
-  // ranking rows with tie labels
   var rankHtml = sorted.map(function(t,i){
     var rank = ranks[i];
     var isTie = ranks.filter(function(r){ return r===rank; }).length > 1;
     var pc = rank===1?'p1':rank===2?'p2':rank===3?'p3':'';
     var rc = rank===1?'r1':rank===2?'r2':rank===3?'r3':'';
-
     var posLabel = rank+'º';
-
     var tieTag = isTie ? '<span style="font-family:var(--B);font-size:22px;font-weight:900;background:#f0ad00;color:#fff;border-radius:6px;padding:2px 10px;margin-left:10px;letter-spacing:0.5px;vertical-align:middle">EMPATE</span>' : '';
 
     return '<div class="rrow '+rc+'">'+
@@ -231,10 +266,14 @@ function podium(){
   document.getElementById('screen').innerHTML =
     '<div class="slabel">CLASIFICACIÓN FINAL</div>'+
     rankHtml+
-    '<button class="backbtn2" onclick="scorer()">← VOLVER A EDITAR</button>';
+    '<button class="backbtn2" onclick="backToScorer()">← VOLVER A EDITAR</button>'+
+    '<button class="resetbtn" onclick="resetSession()">NUEVA PARTIDA</button>';
 }
 
-setup(false);
+function backToScorer(){
+  currentScreen = 'scorer';
+  renderScorerDOM();
+}
 </script>
 
 
