@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0034)file:///D:/Descargas/index_23.html -->
+<!-- saved from url=(0034)file:///D:/Descargas/index_25.html -->
 <html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -74,7 +74,7 @@
     <div class="logo">LA CASA <span>DE</span> PAPEL</div>
     <div class="live" id="liveIndicator">● EN VIVO</div>
   </div>
-  <div id="screen"><div class="q">¿CUÁNTOS EQUIPOS?</div><div class="grid"><button class="nbtn" onclick="startGame(4)">4</button><button class="nbtn" onclick="startGame(6)">6</button><button class="nbtn" onclick="startGame(8)">8</button><button class="nbtn" onclick="startGame(10)">10</button><button class="nbtn" onclick="startGame(12)">12</button><button class="mbtn" onclick="renderSetup(true)">MÁS EQUIPOS</button></div></div>
+  <div id="screen"><button class="backbtn" onclick="resetSession()">← Cambiar número de equipos</button><div class="thead"><span style="text-align:center">#</span><span>Equipo</span><span style="text-align:right">Billetes</span></div><div id="rowsWrap"><div class="trow" data-num="1"><div style="display:flex;align-items:center;justify-content:center"><div class="tnum">1</div></div><input class="iname" data-num="1" data-type="name" type="text" inputmode="text" autocomplete="off" placeholder="NOMBRE" value=""><input class="ibills" data-num="1" data-type="bills" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="0" value=""></div><div class="trow" data-num="2"><div style="display:flex;align-items:center;justify-content:center"><div class="tnum">2</div></div><input class="iname" data-num="2" data-type="name" type="text" inputmode="text" autocomplete="off" placeholder="NOMBRE" value=""><input class="ibills" data-num="2" data-type="bills" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="0" value=""></div><div class="trow" data-num="3"><div style="display:flex;align-items:center;justify-content:center"><div class="tnum">3</div></div><input class="iname" data-num="3" data-type="name" type="text" inputmode="text" autocomplete="off" placeholder="NOMBRE" value=""><input class="ibills" data-num="3" data-type="bills" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="0" value=""></div><div class="trow" data-num="4"><div style="display:flex;align-items:center;justify-content:center"><div class="tnum">4</div></div><input class="iname" data-num="4" data-type="name" type="text" inputmode="text" autocomplete="off" placeholder="NOMBRE" value=""><input class="ibills" data-num="4" data-type="bills" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="0" value=""></div></div><button class="pbtn" onclick="goPodium()">VER CLASIFICACIÓN</button></div>
 </div>
 
 <!-- Firebase SDK -->
@@ -141,6 +141,10 @@ sessionRef.on('value', function(snapshot){
     });
     renderPodium();
   }
+}, function(error){
+  document.getElementById('liveIndicator').textContent = '⚠ ERROR DE CONEXIÓN';
+  document.getElementById('liveIndicator').style.color = '#ff4444';
+  alert('Error de conexión con la base de datos:\n' + error.message + '\n\nCódigo: ' + error.code);
 });
 
 /* ---------- PANTALLA SETUP ---------- */
@@ -158,8 +162,9 @@ function renderSetup(ext){
 function startGame(n){
   var initTeams = {};
   for(var i=1;i<=n;i++) initTeams[i] = { name:'', bills:'' };
-  sessionRef.set({ numTeams: n, teams: initTeams });
-  // el listener onValue se encargará de pasar a la pantalla de marcador en todos los dispositivos
+  sessionRef.set({ numTeams: n, teams: initTeams }).catch(function(err){
+    alert('No se ha podido crear la partida:\n' + err.message + '\n\nCódigo: ' + err.code);
+  });
 }
 
 /* ---------- PANTALLA SCORER (marcador) ---------- */
