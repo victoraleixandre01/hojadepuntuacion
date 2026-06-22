@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<!-- saved from url=(0034)file:///D:/Descargas/index_25.html -->
+<!-- saved from url=(0034)file:///D:/Descargas/index_27.html -->
 <html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>La Casa de Papel — Puntuación</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;700;900&display=swap');
@@ -219,7 +222,14 @@ function applyRemoteTeams(remoteTeams){
 
 function resetSession(){
   if(!confirm('¿Borrar la partida actual para todos y empezar de nuevo?')) return;
-  sessionRef.set(null);
+  sessionRef.set(null).then(function(){
+    // forzamos la transición local también, por si el listener tarda
+    teams = [];
+    currentScreen = 'setup';
+    renderSetup(false);
+  }).catch(function(err){
+    alert('No se ha podido borrar la partida:\n' + err.message + '\n\nCódigo: ' + err.code);
+  });
 }
 
 /* ---------- PANTALLA CLASIFICACIÓN ---------- */
