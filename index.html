@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0034)file:///D:/Descargas/index_27.html -->
+<!-- saved from url=(0034)file:///D:/Descargas/index_28.html -->
 <html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -75,41 +75,108 @@
 <div id="app">
   <div class="header">
     <div class="logo">LA CASA <span>DE</span> PAPEL</div>
-    <div class="live" id="liveIndicator">● EN VIVO</div>
+    <div class="live" id="liveIndicator" style="color: rgb(255, 152, 0);">⚠ RECONECTANDO...</div>
   </div>
-  <div id="screen"><button class="backbtn" onclick="resetSession()">← Cambiar número de equipos</button><div class="thead"><span style="text-align:center">#</span><span>Equipo</span><span style="text-align:right">Billetes</span></div><div id="rowsWrap"><div class="trow" data-num="1"><div style="display:flex;align-items:center;justify-content:center"><div class="tnum">1</div></div><input class="iname" data-num="1" data-type="name" type="text" inputmode="text" autocomplete="off" placeholder="NOMBRE" value=""><input class="ibills" data-num="1" data-type="bills" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="0" value=""></div><div class="trow" data-num="2"><div style="display:flex;align-items:center;justify-content:center"><div class="tnum">2</div></div><input class="iname" data-num="2" data-type="name" type="text" inputmode="text" autocomplete="off" placeholder="NOMBRE" value=""><input class="ibills" data-num="2" data-type="bills" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="0" value=""></div><div class="trow" data-num="3"><div style="display:flex;align-items:center;justify-content:center"><div class="tnum">3</div></div><input class="iname" data-num="3" data-type="name" type="text" inputmode="text" autocomplete="off" placeholder="NOMBRE" value=""><input class="ibills" data-num="3" data-type="bills" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="0" value=""></div><div class="trow" data-num="4"><div style="display:flex;align-items:center;justify-content:center"><div class="tnum">4</div></div><input class="iname" data-num="4" data-type="name" type="text" inputmode="text" autocomplete="off" placeholder="NOMBRE" value=""><input class="ibills" data-num="4" data-type="bills" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="0" value=""></div></div><button class="pbtn" onclick="goPodium()">VER CLASIFICACIÓN</button></div>
+  <div id="screen"><div class="q">¿CUÁNTOS EQUIPOS?</div><div class="grid"><button class="nbtn" onclick="startGame(4)">4</button><button class="nbtn" onclick="startGame(6)">6</button><button class="nbtn" onclick="startGame(8)">8</button><button class="nbtn" onclick="startGame(10)">10</button><button class="nbtn" onclick="startGame(12)">12</button><button class="mbtn" onclick="renderSetup(true)">MÁS EQUIPOS</button></div></div>
 </div>
 
-<!-- Firebase SDK -->
-<script src="./index_files/firebase-app-compat.js.descarga"></script>
-<script src="./index_files/firebase-database-compat.js.descarga"></script>
-
 <script>
-var firebaseConfig = {
-  apiKey: "AIzaSyCpH9PQaCWV9lHCbx7wBRTwVzfgaHdmqyE",
-  authDomain: "hoja-de-puntuacion-f5268.firebaseapp.com",
-  databaseURL: "https://hoja-de-puntuacion-f5268-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "hoja-de-puntuacion-f5268",
-  storageBucket: "hoja-de-puntuacion-f5268.firebasestorage.app",
-  messagingSenderId: "827563821994",
-  appId: "1:827563821994:web:1abffebb7e56319393b9d3"
-};
-firebase.initializeApp(firebaseConfig);
-var db = firebase.database();
-var sessionRef = db.ref('session');
+/* ---------- CONEXIÓN CON FIREBASE (vía API REST + Server-Sent Events) ---------- */
+/* No usamos el SDK de Firebase (puede ser bloqueado por algunos antivirus/redes).
+   En su lugar hablamos directamente con la base de datos por HTTPS normal. */
+var BASE_URL = 'https://hoja-de-puntuacion-f5268-default-rtdb.europe-west1.firebasedatabase.app';
 
 var teams = [];
 var currentScreen = 'loading'; // loading | setup | scorer | podium
+var sessionData = null; // espejo local de /session
 
 function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-/* ---------- CONEXIÓN EN TIEMPO REAL ---------- */
-sessionRef.on('value', function(snapshot){
-  var data = snapshot.val();
-  document.getElementById('liveIndicator').textContent = '● EN VIVO';
+function fbPut(path, value){
+  return fetch(BASE_URL + path + '.json', {
+    method: 'PUT',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(value)
+  }).then(function(res){
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  });
+}
+
+function fbDelete(path){
+  return fetch(BASE_URL + path + '.json', { method: 'DELETE' }).then(function(res){
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  });
+}
+
+function setNestedValue(root, path, value){
+  var segments = path.split('/').filter(Boolean);
+  if(segments.length === 0) return value;
+  var obj = root;
+  for(var i=0;i<segments.length-1;i++){
+    var seg = segments[i];
+    if(typeof obj[seg] !== 'object' || obj[seg] === null) obj[seg] = {};
+    obj = obj[seg];
+  }
+  var lastSeg = segments[segments.length-1];
+  if(value === null || value === undefined){
+    delete obj[lastSeg];
+  } else {
+    obj[lastSeg] = value;
+  }
+  return root;
+}
+
+function applyPutEvent(payload){
+  var path = payload.path;
+  var data = payload.data;
+  if(path === '/' || path === ''){
+    sessionData = data;
+  } else {
+    if(sessionData === null || typeof sessionData !== 'object') sessionData = {};
+    setNestedValue(sessionData, path, data);
+  }
+  handleSessionUpdate();
+}
+
+function applyPatchEvent(payload){
+  var basePath = (payload.path === '/' ? '' : payload.path);
+  if(sessionData === null || typeof sessionData !== 'object') sessionData = {};
+  Object.keys(payload.data || {}).forEach(function(key){
+    setNestedValue(sessionData, basePath + '/' + key, payload.data[key]);
+  });
+  handleSessionUpdate();
+}
+
+function startStream(){
+  var es = new EventSource(BASE_URL + '/session.json');
+
+  es.addEventListener('put', function(e){
+    try { applyPutEvent(JSON.parse(e.data)); }
+    catch(err){ console.error('SSE put parse error', err); }
+  });
+
+  es.addEventListener('patch', function(e){
+    try { applyPatchEvent(JSON.parse(e.data)); }
+    catch(err){ console.error('SSE patch parse error', err); }
+  });
+
+  es.onerror = function(){
+    var ind = document.getElementById('liveIndicator');
+    ind.textContent = '⚠ RECONECTANDO...';
+    ind.style.color = '#ff9800';
+  };
+}
+
+function handleSessionUpdate(){
+  var ind = document.getElementById('liveIndicator');
+  ind.textContent = '● EN VIVO';
+  ind.style.color = '#4caf50';
+
+  var data = sessionData;
 
   if(!data || !data.numTeams){
-    // No hay sesión activa -> pantalla de inicio
     if(currentScreen !== 'setup'){
       teams = [];
       currentScreen = 'setup';
@@ -121,7 +188,6 @@ sessionRef.on('value', function(snapshot){
   var n = data.numTeams;
 
   if(currentScreen === 'setup' || currentScreen === 'loading' || teams.length !== n){
-    // (re)construir el array local de equipos
     teams = [];
     for(var i=1;i<=n;i++){
       var rt = data.teams && data.teams[i];
@@ -144,11 +210,9 @@ sessionRef.on('value', function(snapshot){
     });
     renderPodium();
   }
-}, function(error){
-  document.getElementById('liveIndicator').textContent = '⚠ ERROR DE CONEXIÓN';
-  document.getElementById('liveIndicator').style.color = '#ff4444';
-  alert('Error de conexión con la base de datos:\n' + error.message + '\n\nCódigo: ' + error.code);
-});
+}
+
+startStream();
 
 /* ---------- PANTALLA SETUP ---------- */
 function renderSetup(ext){
@@ -165,8 +229,8 @@ function renderSetup(ext){
 function startGame(n){
   var initTeams = {};
   for(var i=1;i<=n;i++) initTeams[i] = { name:'', bills:'' };
-  sessionRef.set({ numTeams: n, teams: initTeams }).catch(function(err){
-    alert('No se ha podido crear la partida:\n' + err.message + '\n\nCódigo: ' + err.code);
+  fbPut('/session', { numTeams: n, teams: initTeams }).catch(function(err){
+    alert('No se ha podido crear la partida:\n' + err.message);
   });
 }
 
@@ -197,7 +261,7 @@ function renderScorerDOM(){
     }
     var t = teams.find(function(x){ return x.num === parseInt(num); });
     if(t) t[type] = val;
-    sessionRef.child('teams/'+num+'/'+type).set(val);
+    fbPut('/session/teams/'+num+'/'+type, val).catch(function(err){ console.error(err); });
   });
 }
 
@@ -222,13 +286,12 @@ function applyRemoteTeams(remoteTeams){
 
 function resetSession(){
   if(!confirm('¿Borrar la partida actual para todos y empezar de nuevo?')) return;
-  sessionRef.set(null).then(function(){
-    // forzamos la transición local también, por si el listener tarda
+  fbDelete('/session').then(function(){
     teams = [];
     currentScreen = 'setup';
     renderSetup(false);
   }).catch(function(err){
-    alert('No se ha podido borrar la partida:\n' + err.message + '\n\nCódigo: ' + err.code);
+    alert('No se ha podido borrar la partida:\n' + err.message);
   });
 }
 
